@@ -3,6 +3,9 @@
 Multi-currency loan pre-approval demo: a React landing page with a live instalment
 calculator and a validated application form, backed by a small Express API.
 
+**Live:** <https://amberline-web-production.up.railway.app> · Railway project `amberline-loan-demo`,
+service `amberline-web`, environment `production`.
+
 > **Demonstration only.** This application is not a lender, is not authorised to provide
 > credit, and makes no credit decisions. It never contacts a credit bureau. Every figure it
 > shows is an estimate.
@@ -124,6 +127,7 @@ including the reference dialog.
 
 | Setting | Value |
 |---|---|
+| Service | `amberline-web` (project `amberline-loan-demo`) |
 | Build | `npm ci && npm run build` |
 | Start | `npm start` |
 | Health check | `/healthz` (120 s timeout, restarts on failure) |
