@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const V = require('./lib/validation');
 
 const PORT = process.env.PORT || 3000;
-const CONSENT_VERSION = process.env.CONSENT_VERSION || '2026-11-demo-v1';
+const CONSENT_VERSION = process.env.CONSENT_VERSION || '2026-11-zirat-v1';
 const MONTHLY_RATE = Number(process.env.MONTHLY_RATE || 2.49); // percent per month, shown in the calculator
 const TERM_MONTHS = Number(process.env.TERM_MONTHS || 36);
 
@@ -59,7 +59,7 @@ async function initDb() {
 function makeReference() {
   const d = new Date();
   const ymd = d.toISOString().slice(0, 10).replace(/-/g, '');
-  return `AMB-${ymd}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
+  return `ZIR-${ymd}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
 }
 
 // ---------- API ----------
@@ -123,5 +123,5 @@ app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] })
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
 initDb()
-  .then(() => app.listen(PORT, '0.0.0.0', () => console.log(`Amberline demo listening on ${PORT}`)))
+  .then(() => app.listen(PORT, '0.0.0.0', () => console.log(`Zirat Loan App listening on ${PORT}`)))
   .catch(e => { console.error(e); process.exit(1); });
