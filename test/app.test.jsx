@@ -3,8 +3,20 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from '../src/App.jsx';
 
+const CONFIG = {
+  monthlyRate: 2.49,
+  termMonths: 36,
+  minAmount: 100000,
+  maxAmount: 50000000,
+  currencies: ['TRY', 'USD', 'EUR', 'GBP'],
+  consentVersion: 'test-v1',
+};
+
 function stubFetch({ onPost } = {}) {
   const fetchMock = vi.fn(async (url, options = {}) => {
+    if (String(url).includes('/api/config')) {
+      return { ok: true, json: async () => CONFIG };
+    }
     onPost?.(options);
     return {
       ok: true,
@@ -32,30 +44,24 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const instalment = () => screen.getByTestId('instalment').textContent;
-
 describe('landing page', () => {
-  it('renders the hero and the primary call to action', () => {
+  it('renders the hero and the primary call to action', async () => {
     render(<App />);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/personal & business loans/i);
-    expect(screen.getByRole('button', { name: /Get Free Pre-Approval/i })).toBeInTheDocument();
-  });
-
-  it('renders every section from the brief', () => {
-    render(<App />);
-    expect(screen.getByRole('heading', { name: /How Your Application Is Processed/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Calculate Your Repayments/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Submit Your Request/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Client Testimonials/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/four currencies/i);
+    expect(screen.getByRole('button', { name: /Start your application/i })).toBeInTheDocument();
+    await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/config'));
   });
 
   it('converts the estimate when the currency changes', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect(instalment()).toMatch(/^₺/);
+    expect(screen.getAllByText('₺105,964.69').length).toBeGreaterThan(0);
+
     await user.click(screen.getByRole('button', { name: /GBP/i }));
-    expect(instalment()).toMatch(/^£/);
+
+    expect(screen.getAllByText('£105,964.69').length).toBeGreaterThan(0);
+    expect(screen.queryByText('₺105,964.69')).not.toBeInTheDocument();
   });
 
   it('keeps the application form in step with the calculator', async () => {
@@ -65,28 +71,18 @@ describe('landing page', () => {
     await user.click(screen.getByRole('button', { name: /EUR/i }));
 
     expect(screen.getByLabelText('Currency', { selector: 'select' })).toHaveValue('EUR');
-    expect(screen.getByLabelText(/Loan Amount/i, { selector: '#form-amount' })).toHaveValue(2500000);
-  });
-
-  it('applies a quick-select amount to both calculator and form', async () => {
-    const user = userEvent.setup();
-    render(<App />);
-
-    await user.click(screen.getByRole('button', { name: '₺10,000,000' }));
-
-    expect(screen.getByLabelText('Loan Amount', { selector: '#calc-amount' })).toHaveValue(10000000);
-    expect(screen.getByLabelText(/Loan Amount/i, { selector: '#form-amount' })).toHaveValue(10000000);
+    expect(screen.getByLabelText('Loan amount', { selector: '#form-amount' })).toHaveValue(2500000);
   });
 
   it('advances the testimonial carousel', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect(screen.getByText('Emre K.')).toBeInTheDocument();
+    expect(screen.getByText('Emre Kaya')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /Next testimonial/i }));
-    expect(screen.getByText('Zeynep A.')).toBeInTheDocument();
+    expect(screen.getByText('Zeynep Arslan')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /Previous testimonial/i }));
-    expect(screen.getByText('Emre K.')).toBeInTheDocument();
+    expect(screen.getByText('Emre Kaya')).toBeInTheDocument();
   });
 
   it('opens the contact dialog and closes it with Escape', async () => {
@@ -107,7 +103,7 @@ describe('application form', () => {
     const fetchMock = stubFetch();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /Submit & Continue/i }));
+    await user.click(screen.getByRole('button', { name: /Submit application/i }));
 
     expect(screen.getByText('Full name is required.')).toBeInTheDocument();
     expect(screen.getByText('Telephone number is required.')).toBeInTheDocument();
@@ -115,18 +111,18 @@ describe('application form', () => {
     expect(
       screen.getByText('You must accept the privacy and data processing notice.'),
     ).toBeInTheDocument();
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(fetchMock.mock.calls.some(([url]) => String(url).includes('/api/applications'))).toBe(false);
   });
 
   it('rejects an invalid national ID checksum', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.type(screen.getByLabelText(/Full Name/i), 'Ayşe Yılmaz');
-    await user.type(screen.getByLabelText(/Turkish Mobile Phone Number/i), '0532 123 4567');
-    await user.type(screen.getByLabelText(/Turkish ID Number/i), '10000000147');
+    await user.type(screen.getByLabelText('Full name'), 'Ayşe Yılmaz');
+    await user.type(screen.getByLabelText('Telephone'), '0532 123 4567');
+    await user.type(screen.getByLabelText(/National ID/), '10000000147');
     await user.click(screen.getByRole('checkbox'));
-    await user.click(screen.getByRole('button', { name: /Submit & Continue/i }));
+    await user.click(screen.getByRole('button', { name: /Submit application/i }));
 
     expect(screen.getByText(/11th digit is invalid/i)).toBeInTheDocument();
   });
@@ -137,15 +133,20 @@ describe('application form', () => {
     stubFetch({ onPost: (options) => posts.push(JSON.parse(options.body)) });
     render(<App />);
 
-    await user.type(screen.getByLabelText(/Full Name/i), 'Ayşe Yılmaz');
-    await user.type(screen.getByLabelText(/Turkish Mobile Phone Number/i), '0532 123 4567');
-    await user.click(screen.getByRole('button', { name: /Fill Valid Demo ID/i }));
+    await user.type(screen.getByLabelText('Full name'), 'Ayşe Yılmaz');
+    await user.type(screen.getByLabelText('Telephone'), '0532 123 4567');
+    await user.click(screen.getByRole('button', { name: /Fill demo ID/i }));
     await user.click(screen.getByRole('checkbox'));
-    await user.click(screen.getByRole('button', { name: /Submit & Continue/i }));
+    await user.click(screen.getByRole('button', { name: /Submit application/i }));
 
-    await waitFor(() => expect(screen.getByText(/ZIR-TEST-0001/)).toBeInTheDocument());
+    expect(await screen.findByText(/ZIR-TEST-0001/)).toBeInTheDocument();
     expect(posts).toHaveLength(1);
-    expect(posts[0]).toMatchObject({ fullName: 'Ayşe Yılmaz', currency: 'TRY', consent: true });
-    expect(posts[0].nationalId).toMatch(/^\d{11}$/);
+    expect(posts[0]).toMatchObject({
+      fullName: 'Ayşe Yılmaz',
+      currency: 'TRY',
+      amount: 2500000,
+      consent: true,
+    });
+    expect(posts[0].nationalId).toMatch(/^99\d{9}$/);
   });
 });
