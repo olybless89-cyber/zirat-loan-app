@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "Zirat Loan App — multi-currency loan landing page and pre-approval application",
+  "description": "Zirat Loan App \u2014 multi-currency loan landing page and pre-approval application",
   "main": "server.js",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,7 @@
     "test": "node test/validation.test.js && vitest run"
   },
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   },
   "dependencies": {
     "express": "^5.3.0",

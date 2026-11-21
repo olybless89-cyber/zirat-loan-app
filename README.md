@@ -128,7 +128,7 @@ including the reference dialog.
 | Setting | Value |
 |---|---|
 | Service | `amberline-web` (project `amberline-loan-demo`) |
-| Build | `npm ci && npm run build` |
+| Build | `npm install --include=dev && npm run build` |
 | Start | `npm start` |
 | Health check | `/healthz` (120 s timeout, restarts on failure) |
 | Node | 22 (`.nvmrc`) |
