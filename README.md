@@ -118,6 +118,36 @@ bounds, consent and instalment maths. `test/app.test.jsx` covers rendering, curr
 conversion, calculator/form sync, the carousel, modal dismissal and the full submit path
 including the reference dialog.
 
+## Deploying to Railway
+
+`railway.json` pins the whole pipeline, so a connected repo deploys without extra setup:
+
+| Setting | Value |
+|---|---|
+| Build | `npm ci && npm run build` |
+| Start | `npm start` |
+| Health check | `/healthz` (120 s timeout, restarts on failure) |
+| Node | 22 (`.nvmrc`) |
+
+1. In Railway: **New Project → Deploy from GitHub repo → `olybless89-cyber/zirat-loan-app`**, branch `main`.
+2. Add **New → Database → PostgreSQL**. Railway injects `DATABASE_URL` into the service; the app creates its `applications` table on first boot.
+3. Set the service variables:
+
+   ```
+   MONTHLY_RATE=2.49
+   TERM_MONTHS=36
+   CONSENT_VERSION=2026-11-zirat-v1
+   VITE_CONTACT_PHONE=+44 ...
+   VITE_CONTACT_EMAIL=applications@...
+   VITE_CONTACT_ADDRESS=...
+   VITE_SUPPORT_HOURS=Mon–Fri, 09:00–18:00 GMT
+   ```
+
+   `VITE_*` values are baked in at build time, so set them before the first deploy — changing them needs a redeploy.
+4. Generate a domain under **Settings → Networking**. `PORT` is provided by Railway and read by `server.js`.
+
+Every push to `main` redeploys automatically. Without `DATABASE_URL` the app still boots, but submissions live in memory and disappear on restart.
+
 ## Deployment
 
 Any Node 20+ host works. Build, then run the server with `DATABASE_URL` set:
