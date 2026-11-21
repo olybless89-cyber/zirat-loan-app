@@ -10,10 +10,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0f241c;--ink-2:#3b5048;--muted:#6b7d75;--line:#e0e8e2;
-  --paper:#f7faf7;--card:#ffffff;--brand:#0d4a35;--brand-2:#14795a;
-  --gold:#c8a03c;--gold-2:#f0d68c;--red:#b3261e;--green:#2e7d4f;
-  --radius:14px;--shadow:0 10px 30px rgba(15,36,28,.08);
+  --ink:#14232b;--ink-2:#3d4f58;--muted:#6b7c85;--line:#e3e8ea;
+  --paper:#fbf8f3;--card:#ffffff;--brand:#0f4c5c;--brand-2:#16697a;
+  --gold:#e09f3e;--gold-2:#f3c178;--red:#b3261e;--green:#2e7d4f;
+  --radius:14px;--shadow:0 10px 30px rgba(20,35,43,.08);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -26,18 +26,18 @@ section{padding:80px 0;scroll-margin-top:70px}
 .lead{color:var(--ink-2);font-size:1.08rem;max-width:640px}
 .btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:13px 24px;font:600 .95rem Inter,sans-serif;cursor:pointer;text-decoration:none;transition:transform .15s,background .15s}
 .btn:hover{transform:translateY(-1px)}
-.btn-primary{background:var(--gold);color:#241a04}
-.btn-primary:hover{background:#b8922f}
+.btn-primary{background:var(--gold);color:#1b1306}
+.btn-primary:hover{background:#d08e2c}
 .btn-ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
 .btn[disabled]{opacity:.65;cursor:wait;transform:none}
 
 /* announcement bar */
-.demo-bar{background:var(--ink);color:#eef5ef;font-size:.85rem;text-align:center;padding:9px 16px}
+.demo-bar{background:var(--ink);color:#f6efe2;font-size:.85rem;text-align:center;padding:9px 16px}
 .demo-bar strong{color:var(--gold-2)}
 .demo-bar .sep{opacity:.4;margin:0 8px}
 
 /* nav */
-nav.top{position:sticky;top:0;z-index:40;background:rgba(247,250,247,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top{position:sticky;top:0;z-index:40;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 nav.top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center}
@@ -55,13 +55,13 @@ nav.top .wrap{display:flex;align-items:center;justify-content:space-between;heig
 }
 
 /* hero */
-.hero{padding:70px 0 90px;background:radial-gradient(1000px 400px at 85% 0%,#e8f3ea 0,transparent 60%)}
+.hero{padding:70px 0 90px;background:radial-gradient(1000px 400px at 85% 0%,#f6e3c4 0,transparent 60%)}
 .hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:50px;align-items:center}
 .hero h1{font-size:clamp(2.2rem,4.6vw,3.5rem)}
 .hero h1 em{font-style:normal;color:var(--brand-2)}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 28px}
 .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.85rem;font-weight:600}
-.metrics{background:var(--brand);color:#e7f2eb;border-radius:22px;padding:30px;box-shadow:var(--shadow)}
+.metrics{background:var(--brand);color:#eaf3f4;border-radius:22px;padding:30px;box-shadow:var(--shadow)}
 .metrics h3{color:#fff;font-size:1.3rem}
 .metric{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:.95rem}
 .metric:last-of-type{border-bottom:0}
@@ -72,7 +72,7 @@ nav.top .wrap{display:flex;align-items:center;justify-content:space-between;heig
 /* cards */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
-.card .ic{width:42px;height:42px;border-radius:12px;background:#f2f8ee;color:var(--brand);display:grid;place-items:center;margin-bottom:14px}
+.card .ic{width:42px;height:42px;border-radius:12px;background:#fdf0dc;color:var(--brand);display:grid;place-items:center;margin-bottom:14px}
 .card .ic svg{width:21px;height:21px}
 .card h3{font-size:1.1rem}
 .card p{margin:0;color:var(--ink-2);font-size:.93rem}
@@ -88,21 +88,21 @@ nav.top .wrap{display:flex;align-items:center;justify-content:space-between;heig
 @media (max-width:520px){.steps{grid-template-columns:1fr}}
 
 /* calculator + form */
-.alt{background:#eef4ef}
+.alt{background:#f3eee5}
 .calc{display:grid;grid-template-columns:1.3fr 1fr;gap:30px;margin-top:36px}
 .panel{background:#fff;border-radius:20px;padding:30px;border:1px solid var(--line);box-shadow:var(--shadow)}
 label{display:block;font-weight:600;font-size:.88rem;margin-bottom:6px}
-.seg{display:flex;gap:6px;background:#eff4f0;border-radius:12px;padding:5px;margin-bottom:24px}
+.seg{display:flex;gap:6px;background:#f1f4f5;border-radius:12px;padding:5px;margin-bottom:24px}
 .seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:10px;font:600 .9rem Inter;cursor:pointer;color:var(--ink-2)}
 .seg button.on{background:#fff;color:var(--brand);box-shadow:0 2px 6px rgba(0,0,0,.08)}
 input[type=text],input[type=tel],input[type=number],select{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font:500 1rem Inter;background:#fff;color:var(--ink)}
-input:focus,select:focus{outline:0;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(20,121,90,.15)}
+input:focus,select:focus{outline:0;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(22,105,122,.15)}
 input[type=range]{width:100%;accent-color:var(--brand);margin:14px 0 4px}
 .range-ends{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
 .result{background:var(--brand);color:#fff;border-radius:20px;padding:30px;display:flex;flex-direction:column;justify-content:center}
 .result .big{font-family:Fraunces,serif;font-size:2.6rem;font-weight:700;color:var(--gold-2);margin:6px 0 16px;word-break:break-word}
 .result .row{display:flex;justify-content:space-between;font-size:.9rem;padding:8px 0;border-top:1px solid rgba(255,255,255,.15)}
-.formula{font-size:.82rem;color:var(--ink-2);margin-top:18px;background:#f7faf7;border-radius:10px;padding:12px 14px}
+.formula{font-size:.82rem;color:var(--ink-2);margin-top:18px;background:#fbf8f3;border-radius:10px;padding:12px 14px}
 @media (max-width:860px){.calc{grid-template-columns:1fr}}
 
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
@@ -112,13 +112,13 @@ input[type=range]{width:100%;accent-color:var(--brand);margin:14px 0 4px}
 .invalid input,.invalid select{border-color:var(--red)}
 .inline{display:flex;gap:8px}
 .inline input{flex:1}
-.mini{border:1.5px dashed var(--brand-2);background:#eef7f1;color:var(--brand);border-radius:10px;padding:0 12px;font:600 .8rem Inter;cursor:pointer;white-space:nowrap}
+.mini{border:1.5px dashed var(--brand-2);background:#f0f7f8;color:var(--brand);border-radius:10px;padding:0 12px;font:600 .8rem Inter;cursor:pointer;white-space:nowrap}
 .consent{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;padding:14px;border-radius:10px;border:1.5px solid transparent}
 .consent.invalid{border-color:var(--red);background:#fdf1f0}
 .consent input{margin-top:4px;width:18px;height:18px;accent-color:var(--brand)}
-.notice{background:#fff8e6;border:1px solid #eed9a3;color:#5c4407;border-radius:12px;padding:12px 16px;font-size:.88rem;margin-bottom:22px}
+.notice{background:#fff6e5;border:1px solid #f0d49e;color:#5c3f07;border-radius:12px;padding:12px 16px;font-size:.88rem;margin-bottom:22px}
 .form-alert{display:none;background:#fdf1f0;color:var(--red);border:1px solid #f1c6c2;border-radius:10px;padding:12px 14px;margin-top:16px;font-size:.9rem}
-.spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.25);border-top-color:#241a04;border-radius:50%;animation:spin .8s linear infinite;display:none}
+.spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.25);border-top-color:#1b1306;border-radius:50%;animation:spin .8s linear infinite;display:none}
 .loading .spinner{display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -134,32 +134,32 @@ input[type=range]{width:100%;accent-color:var(--brand);margin:14px 0 4px}
 .car-ctrl{display:flex;justify-content:center;gap:12px;margin-top:20px;align-items:center}
 .car-ctrl button{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:1.1rem}
 .dots{display:flex;gap:6px}
-.dots i{width:8px;height:8px;border-radius:50%;background:#cfdcd4;display:block}
+.dots i{width:8px;height:8px;border-radius:50%;background:#cfd8dc;display:block}
 .dots i.on{background:var(--brand)}
-.sample-label{display:inline-block;font-size:.75rem;background:#eef2ef;color:var(--ink-2);border-radius:6px;padding:3px 9px;margin-bottom:6px}
+.sample-label{display:inline-block;font-size:.75rem;background:#eef2f3;color:var(--ink-2);border-radius:6px;padding:3px 9px;margin-bottom:6px}
 
 /* contact & footer */
 .contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px}
 @media (max-width:860px){.contact-grid{grid-template-columns:1fr 1fr}}
-footer{background:var(--ink);color:#c4d3ca;padding:56px 0 28px;font-size:.9rem}
-footer a{color:#e7efea;text-decoration:none}
+footer{background:var(--ink);color:#c9d3d7;padding:56px 0 28px;font-size:.9rem}
+footer a{color:#e8eef0;text-decoration:none}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}
 footer h4{color:#fff;font-family:Inter;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;margin:0 0 14px}
 footer ul{list-style:none;padding:0;margin:0}
 footer li{margin-bottom:8px}
-.linkbtn{background:none;border:0;color:#e7efea;font:inherit;cursor:pointer;padding:0}
+.linkbtn{background:none;border:0;color:#e8eef0;font:inherit;cursor:pointer;padding:0}
 .linkbtn:hover,footer a:hover{color:var(--gold-2)}
-.copy{border-top:1px solid rgba(255,255,255,.1);margin-top:40px;padding-top:20px;font-size:.8rem;color:#8ea79a}
+.copy{border-top:1px solid rgba(255,255,255,.1);margin-top:40px;padding-top:20px;font-size:.8rem;color:#8ea0a7}
 @media (max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
 
 /* modals */
-.modal{position:fixed;inset:0;background:rgba(10,25,18,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal{position:fixed;inset:0;background:rgba(10,20,25,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal.open{display:flex}
 .modal-box{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:85vh;overflow:auto;padding:32px;position:relative}
 .modal-box h3{font-size:1.4rem;padding-right:30px}
 .modal-box p,.modal-box li{color:var(--ink-2);font-size:.93rem}
-.x{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;border:0;background:#eff4f0;cursor:pointer;font-size:1.1rem}
-.ref{font-family:ui-monospace,Menlo,monospace;font-size:1.2rem;background:#eef7f1;color:var(--brand);border-radius:10px;padding:12px;text-align:center;margin:14px 0;font-weight:700}
+.x{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;border:0;background:#f1f4f5;cursor:pointer;font-size:1.1rem}
+.ref{font-family:ui-monospace,Menlo,monospace;font-size:1.2rem;background:#f0f7f8;color:var(--brand);border-radius:10px;padding:12px;text-align:center;margin:14px 0;font-weight:700}
 .sum{width:100%;border-collapse:collapse;font-size:.92rem}
 .sum td{padding:8px 0;border-bottom:1px solid var(--line)}
 .sum td:last-child{text-align:right;font-weight:600}
@@ -175,7 +175,7 @@ footer li{margin-bottom:8px}
 <nav class="top">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Zirat Loan App home">
-      <span class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M6 8h12M7 21h10" stroke="#f0d68c" stroke-width="2.2" stroke-linecap="round"/><path d="M6 8c0 3 2.7 4.5 6 4.5S18 11 18 8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>
+      <span class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M6 8h12M7 21h10" stroke="#f3c178" stroke-width="2.2" stroke-linecap="round"/><path d="M6 8c0 3 2.7 4.5 6 4.5S18 11 18 8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>
       <span class="brand-name">Zirat Loan App</span>
       <span class="brand-tag">London Branch</span>
     </a>
