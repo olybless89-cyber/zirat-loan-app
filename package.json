@@ -1,8 +1,8 @@
 {
-  "name": "amberline-loan-demo",
+  "name": "zirat-loan-app",
   "version": "1.0.0",
   "private": true,
-  "description": "Amberline Credit — fictional demo loan landing page and pre-approval form",
+  "description": "Zirat Loan App — multi-currency loan landing page and pre-approval form",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
