@@ -2,9 +2,9 @@ import { Award, CheckCircle2, Lock, MessageCircle, ShieldCheck } from 'lucide-re
 import { formatMoney } from '../../lib/validation.js';
 
 const BULLETS = [
-  'Borrow 100,000 – 50,000,000, or the USD / EUR / GBP equivalent',
-  'Indicative pre-approval decision within two business days',
-  'Pick TRY, USD, EUR or GBP before you apply',
+  '100,000 – 50,000,000, or the USD / EUR / GBP equivalent',
+  'Indicative decision time of two business days',
+  'TRY / USD / EUR / GBP multi-currency options',
   'No credit bureau or third-party checks in this demo',
 ];
 
@@ -39,7 +39,7 @@ export default function Hero({ amount, currency, rate, term, onApply, onOpenCont
             </div>
 
             <h1 className="text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              Personal and business financing in{' '}
+              Personal and business loans in{' '}
               <span className="bg-gradient-to-r from-red-400 to-rose-200 bg-clip-text text-transparent">
                 four currencies
               </span>
@@ -49,8 +49,7 @@ export default function Hero({ amount, currency, rate, term, onApply, onOpenCont
             <p className="text-lg font-medium leading-relaxed text-slate-300 sm:text-xl">
               TRY <span className="text-rose-400">•</span> USD{' '}
               <span className="text-rose-400">•</span> EUR{' '}
-              <span className="text-rose-400">•</span> GBP — estimate your monthly instalment, then
-              submit a pre-approval request in minutes.
+              <span className="text-rose-400">•</span> GBP — compare instalments before you apply.
             </p>
 
             <div className="grid gap-3 pt-2 sm:grid-cols-2">
@@ -129,11 +128,6 @@ export default function Hero({ amount, currency, rate, term, onApply, onOpenCont
                   <dd className="text-[10px] uppercase tracking-wide text-slate-400">illustrative</dd>
                 </div>
               </dl>
-
-              <div className="flex items-baseline justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2.5">
-                <span className="text-xs text-slate-400">Credit check</span>
-                <span className="text-sm font-bold text-emerald-400">None in this demo</span>
-              </div>
 
               <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5">
                 <Lock className="h-5 w-5 shrink-0 text-emerald-400" aria-hidden="true" />
