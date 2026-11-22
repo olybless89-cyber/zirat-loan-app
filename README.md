@@ -5,8 +5,18 @@ calculator and a validated application form, plus two signed-in areas — an app
 portal for tracking a request and a staff console for reviewing it — backed by a small
 Express API.
 
-**Live:** <https://amberline-web-production.up.railway.app> · Railway project `amberline-loan-demo`,
+**Live:** <https://ziraatbank.up.railway.app> · Railway project `amberline-loan-demo`,
 service `amberline-web`, environment `production`.
+
+| Area | URL |
+| --- | --- |
+| Landing page | <https://ziraatbank.up.railway.app> |
+| Applicant portal | <https://ziraatbank.up.railway.app/login> |
+| Staff console | <https://ziraatbank.up.railway.app/admin/login> |
+
+Staff credentials are set as Railway variables (`ADMIN_EMAIL`, `ADMIN_PASSWORD`) on the
+`production` environment and are never committed to this repository. Change them in the
+Railway dashboard; the service redeploys automatically.
 
 > **Demonstration only.** This application is not a lender, is not authorised to provide
 > credit, and makes no credit decisions. It never contacts a credit bureau. Every figure it
