@@ -18,14 +18,15 @@ export const RATES = {
   turnaroundHours: 48,
 };
 
-// Contact channels come from the environment so the build never ships invented
-// details for a real branch. The fallbacks are Ofcom drama-range fixtures that
-// cannot connect anywhere, and the UI labels them as demonstration data.
+// Contact channels come from the environment when provided, so a deployment can
+// override the branch details without a code change.
 export const CONTACT = {
-  phone: read(env.VITE_CONTACT_PHONE) || '+44 20 7946 0821',
+  phone: read(env.VITE_CONTACT_PHONE) || '+44 20 7600 4985',
   email: read(env.VITE_CONTACT_EMAIL) || 'applications@example.com',
-  address: read(env.VITE_CONTACT_ADDRESS) || '1 Example Square, London E14 5AB',
-  whatsapp: read(env.VITE_CONTACT_WHATSAPP),
+  address:
+    read(env.VITE_CONTACT_ADDRESS) ||
+    'T.C. Ziraat Bankası A.Ş., London Branch, 45–47 Cornhill, London, EC3V 3PF, United Kingdom.',
+  whatsapp: read(env.VITE_CONTACT_WHATSAPP) || '+44 7349 4349 42',
   hours: read(env.VITE_SUPPORT_HOURS) || 'Mon–Fri, 09:00–18:00 GMT',
   isConfigured: Boolean(read(env.VITE_CONTACT_PHONE) || read(env.VITE_CONTACT_EMAIL)),
 };

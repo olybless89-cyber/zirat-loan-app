@@ -1,5 +1,5 @@
-import { Mail, MapPin, Phone } from 'lucide-react';
-import { BRAND, CONTACT, telHref } from '../config/site';
+import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { BRAND, CONTACT, WHATSAPP_LINK, telHref } from '../config/site';
 import { BrandMark } from './Navbar.jsx';
 
 export default function Footer({ onOpenLegal, onOpenContact }) {
@@ -59,6 +59,20 @@ export default function Footer({ onOpenLegal, onOpenContact }) {
                   {CONTACT.phone}
                 </a>
               </li>
+              {WHATSAPP_LINK && (
+                <li className="flex items-start gap-2">
+                  <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+                  <a
+                    href={WHATSAPP_LINK}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={`WhatsApp ${CONTACT.whatsapp}`}
+                    className="transition hover:text-white"
+                  >
+                    {CONTACT.whatsapp}
+                  </a>
+                </li>
+              )}
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
                 <a href={`mailto:${CONTACT.email}`} className="transition hover:text-white">

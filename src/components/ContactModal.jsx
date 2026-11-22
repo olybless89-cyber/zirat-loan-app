@@ -54,14 +54,13 @@ export default function ContactModal({ open, onClose }) {
             className="flex items-center justify-center gap-2 rounded-lg bg-success px-4 py-3 text-sm font-bold text-white transition hover:bg-emerald-600"
           >
             <MessageCircle className="h-4 w-4" aria-hidden="true" />
-            Message on WhatsApp
+            Message on WhatsApp · {CONTACT.whatsapp}
           </a>
         )}
 
-        <p className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs leading-relaxed text-amber-800">
-          Demonstration contact details. Set <code>VITE_CONTACT_PHONE</code>,{' '}
-          <code>VITE_CONTACT_EMAIL</code> and <code>VITE_CONTACT_ADDRESS</code> to publish the
-          branch’s verified details.
+        <p className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
+          Contact details are those published for the London branch. This demonstration does not
+          issue credit decisions.
         </p>
       </div>
     </Modal>

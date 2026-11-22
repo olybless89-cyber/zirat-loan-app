@@ -88,12 +88,12 @@ the checksum check and then discarded.
 | `MONTHLY_RATE` | `2.49` | Monthly rate used by the calculator, in percent |
 | `TERM_MONTHS` | `36` | Default term in months |
 | `CONSENT_VERSION` | `2026-11-zirat-v1` | Stored with each application |
-| `VITE_CONTACT_PHONE` / `_EMAIL` / `_ADDRESS` / `_WHATSAPP` | demo fixtures | Contact details shown in the UI |
+| `VITE_CONTACT_PHONE` / `_EMAIL` / `_ADDRESS` / `_WHATSAPP` | branch details | Contact details shown in the UI |
 | `VITE_SUPPORT_HOURS` | `Mon–Fri, 09:00–18:00 GMT` | Banner and contact hours |
 | `VITE_FB_PIXEL_ID`, `VITE_GA_ID` | – | Analytics, loaded only when set |
 
-The fallback contact details are Ofcom drama-range fixtures and are labelled as
-demonstration data in the contact dialog. Replace them before publishing.
+The fallback contact details are the London branch's published phone, address and
+WhatsApp number. Override them with the `VITE_CONTACT_*` variables if they change.
 
 ## Behaviour
 
