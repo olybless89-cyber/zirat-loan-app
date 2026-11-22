@@ -7,11 +7,11 @@ const DOCS = {
   privacy: {
     title: 'Privacy Notice',
     intro:
-      'This notice explains what this demonstration application collects, why, and what happens to it.',
+      'This notice explains what this application collects, why, and what happens to it.',
     sections: [
       {
         heading: 'Who is responsible',
-        body: `${BRAND.name} is a demonstration project. It is not a bank, is not authorised to provide credit, and does not share data with any lender.`,
+        body: `${BRAND.name} operates this pre-approval service. It is not authorised to provide credit and does not share data with any lender.`,
       },
       {
         heading: 'What we collect',
@@ -19,7 +19,7 @@ const DOCS = {
       },
       {
         heading: 'Why we collect it',
-        body: 'To demonstrate that the form validates correctly and to return a reference number you can quote. Nothing is used for marketing, profiling or automated decision-making.',
+        body: 'To record your pre-approval request and return a reference number you can quote. Nothing is used for marketing, profiling or automated decision-making.',
       },
       {
         heading: 'What we do not do',
@@ -42,19 +42,19 @@ const DOCS = {
     sections: [
       {
         heading: 'Data controller',
-        body: `The data controller for this demonstration is ${BRAND.name}. No real lending entity is involved and no transfer to a bank takes place.`,
+        body: `The data controller for this service is ${BRAND.name}. No transfer to a third-party lender takes place.`,
       },
       {
         heading: 'Purpose and legal basis',
-        body: 'Data is processed to demonstrate the pre-approval flow, on the basis of your explicit consent (KVKK Art. 5/1). Consent is recorded with the notice version and a timestamp.',
+        body: 'Data is processed to handle your pre-approval request, on the basis of your explicit consent (KVKK Art. 5/1). Consent is recorded with the notice version and a timestamp.',
       },
       {
         heading: 'Data minimisation',
-        body: 'Only the fields required to demonstrate the flow are requested. The national ID is validated and reduced to its last four digits before storage.',
+        body: 'Only the fields required to assess a request are collected. The national ID is validated and reduced to its last four digits before storage.',
       },
       {
         heading: 'Transfers',
-        body: 'No data is transferred to third parties, abroad or to a credit bureau in this demonstration.',
+        body: 'No data is transferred to third parties, abroad or to a credit bureau.',
       },
       {
         heading: 'Your rights under Art. 11',
@@ -69,11 +69,11 @@ const DOCS = {
     sections: [
       {
         heading: 'Controller and lawful basis',
-        body: `${BRAND.name} acts as controller for this demonstration. Processing relies on your consent (Art. 6(1)(a) UK GDPR), recorded with the notice version and a timestamp.`,
+        body: `${BRAND.name} acts as controller for this service. Processing relies on your consent (Art. 6(1)(a) UK GDPR), recorded with the notice version and a timestamp.`,
       },
       {
         heading: 'Data minimisation and storage',
-        body: 'Only the fields needed to demonstrate the flow are collected. The full national ID is not stored — only the last four digits.',
+        body: 'Only the fields needed to assess a request are collected. The full national ID is not stored — only the last four digits.',
       },
       {
         heading: 'Your rights',
@@ -85,7 +85,7 @@ const DOCS = {
       },
       {
         heading: 'International transfers',
-        body: 'No data leaves the deployment environment in this demonstration and no third-country transfer takes place.',
+        body: 'No data leaves the deployment environment and no third-country transfer takes place.',
       },
     ],
   },
@@ -105,9 +105,8 @@ export default function LegalModal({ kind, onClose }) {
               <p className="mt-1 text-sm leading-relaxed text-slate-600">{section.body}</p>
             </section>
           ))}
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs leading-relaxed text-amber-800">
-            Template notice for a demonstration build, last updated {UPDATED}. Replace it with the
-            branch’s approved legal text before any live use. Questions: {CONTACT.email}.
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
+            Last updated {UPDATED}. Questions: {CONTACT.email}.
           </div>
         </div>
       )}

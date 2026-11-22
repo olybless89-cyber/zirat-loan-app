@@ -40,8 +40,8 @@ export default function AuthLayout({ eyebrow, headline, points = [], children, f
         </div>
 
         <p className="relative text-xs leading-relaxed text-slate-400">
-          Demonstration build for the London branch. {BRAND.regulator} reference {BRAND.frn}.
-          No credit decision is made and no loan is funded.
+          {BRAND.name}, London branch. {BRAND.regulator} reference {BRAND.frn}. No credit decision
+          is made and no loan is funded.
         </p>
       </aside>
 

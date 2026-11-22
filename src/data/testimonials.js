@@ -1,4 +1,4 @@
-// Illustrative demo reviews. The people are fictional and the quotes avoid
+// Placeholder reviews. The people are fictional and the quotes avoid
 // claims about credit outcomes, which the app cannot verify.
 export const TESTIMONIALS = [
   {
