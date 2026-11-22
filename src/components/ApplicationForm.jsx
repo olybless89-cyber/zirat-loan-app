@@ -47,6 +47,8 @@ export default function ApplicationForm({
   onCurrencyChange,
   min,
   max,
+  currencies = CURRENCIES,
+  accepting = true,
   onSuccess,
   onOpenLegal,
 }) {
@@ -230,7 +232,7 @@ export default function ApplicationForm({
                     onChange={(event) => onCurrencyChange(event.target.value)}
                     className={inputClass(errors.currency)}
                   >
-                    {CURRENCIES.map((code) => (
+                    {(currencies?.length ? currencies : CURRENCIES).map((code) => (
                       <option key={code} value={code}>
                         {code} — {CURRENCY_META[code].name}
                       </option>
@@ -283,9 +285,18 @@ export default function ApplicationForm({
                 </div>
               )}
 
+              {!accepting && (
+                <p
+                  role="status"
+                  className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs font-medium text-amber-900"
+                >
+                  The branch is not accepting new applications right now. Please try again later.
+                </p>
+              )}
+
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !accepting}
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
               >
                 {submitting ? (

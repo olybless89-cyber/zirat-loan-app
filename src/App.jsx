@@ -21,6 +21,10 @@ const FALLBACK = {
   termMonths: 36,
   minAmount: MIN_AMOUNT,
   maxAmount: MAX_AMOUNT,
+  currencies: null,
+  announcement: '',
+  acceptingApplications: true,
+  contact: null,
 };
 
 export default function App() {
@@ -63,7 +67,11 @@ export default function App() {
         Skip to content
       </a>
 
-      <AnnouncementBar onOpenLegal={() => setLegal('privacy')} />
+      <AnnouncementBar
+        announcement={config.announcement}
+        contact={config.contact}
+        onOpenLegal={() => setLegal('privacy')}
+      />
       <Navbar onOpenContact={() => setContactOpen(true)} />
 
       <main id="main">
@@ -77,6 +85,7 @@ export default function App() {
           term={term}
           min={config.minAmount}
           max={config.maxAmount}
+          currencies={config.currencies}
           onAmountChange={setAmount}
           onCurrencyChange={setCurrency}
           onTermChange={setTerm}
@@ -90,13 +99,19 @@ export default function App() {
           onCurrencyChange={setCurrency}
           min={config.minAmount}
           max={config.maxAmount}
+          currencies={config.currencies}
+          accepting={config.acceptingApplications}
           onSuccess={handleSuccess}
           onOpenLegal={setLegal}
         />
         <Testimonials />
       </main>
 
-      <Footer onOpenLegal={setLegal} onOpenContact={() => setContactOpen(true)} />
+      <Footer
+        contact={config.contact}
+        onOpenLegal={setLegal}
+        onOpenContact={() => setContactOpen(true)}
+      />
 
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 p-3 backdrop-blur sm:hidden">
         <button

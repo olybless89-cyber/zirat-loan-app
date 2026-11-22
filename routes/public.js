@@ -1,7 +1,8 @@
 import express from 'express';
-import { CURRENCIES, MAX_AMOUNT, MIN_AMOUNT, validateApplication, validateTerm } from '../lib/validation.js';
-import { createApplication, isPersistent } from '../lib/store.js';
+import { validateApplication, validateTerm } from '../lib/validation.js';
+import { createApplication, isPersistent, loadSettings } from '../lib/store.js';
 import { rateLimiter, sameOriginOnly } from '../lib/auth.js';
+import { mergeSettings, publicSettings } from '../lib/settings.js';
 
 export function createPublicRoutes(config) {
   const router = express.Router();
@@ -11,19 +12,28 @@ export function createPublicRoutes(config) {
     message: 'Too many submissions. Please try again later.',
   });
 
-  router.get('/config', (req, res) => {
+  async function currentSettings() {
+    const stored = await loadSettings();
+    return mergeSettings(config.defaults, stored?.data);
+  }
+
+  router.get('/config', async (req, res) => {
+    const settings = await currentSettings();
     res.json({
-      monthlyRate: config.monthlyRate,
-      termMonths: config.termMonths,
-      minAmount: MIN_AMOUNT,
-      maxAmount: MAX_AMOUNT,
-      currencies: CURRENCIES,
-      consentVersion: config.consentVersion,
+      ...publicSettings(settings),
       storage: isPersistent() ? 'postgres' : 'memory',
     });
   });
 
   router.post('/applications', submitLimiter, sameOriginOnly, async (req, res) => {
+    const settings = await currentSettings();
+    if (!settings.acceptingApplications) {
+      return res.status(503).json({
+        ok: false,
+        message: 'The branch is not accepting new applications right now. Please try again later.',
+      });
+    }
+
     const body = req.body || {};
     const input = {
       fullName: typeof body.fullName === 'string' ? body.fullName.trim().replace(/\s+/g, ' ') : '',
@@ -38,6 +48,9 @@ export function createPublicRoutes(config) {
     const errors = validateApplication(input);
     const termError = input.termMonths === undefined ? null : validateTerm(input.termMonths);
     if (termError) errors.termMonths = termError;
+    if (input.currency && !settings.currencies.includes(input.currency)) {
+      errors.currency = 'That currency is not available right now.';
+    }
     if (Object.keys(errors).length) return res.status(422).json({ ok: false, errors });
 
     try {
@@ -47,8 +60,8 @@ export function createPublicRoutes(config) {
         nationalIdLast4: input.nationalId.slice(-4),
         amount: Number(input.amount),
         currency: input.currency,
-        termMonths: input.termMonths === undefined ? config.termMonths : Number(input.termMonths),
-        consentVersion: config.consentVersion,
+        termMonths: input.termMonths === undefined ? settings.termMonths : Number(input.termMonths),
+        consentVersion: settings.consentVersion,
       });
 
       return res.status(201).json({

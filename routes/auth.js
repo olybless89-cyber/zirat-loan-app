@@ -36,11 +36,12 @@ export function createAuthRoutes() {
 
   router.post('/auth/admin/login', adminLimiter, sameOriginOnly, async (req, res) => {
     const { email, password } = req.body || {};
-    if (!checkAdminCredentials(email, password)) {
+    const account = await checkAdminCredentials(email, password);
+    if (!account) {
       return res.status(401).json({ ok: false, message: 'Email or password is incorrect.' });
     }
-    await issueSession(req, res, { role: 'admin', subject: adminProfile.email });
-    return res.json({ ok: true, role: 'admin', subject: adminProfile.email });
+    await issueSession(req, res, { role: 'admin', subject: account.email });
+    return res.json({ ok: true, role: 'admin', subject: account.email });
   });
 
   router.post('/auth/admin/logout', sameOriginOnly, async (req, res) => {

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   AlertCircle,
   CheckCircle2,
@@ -13,6 +14,7 @@ import {
   ThumbsUp,
   XCircle,
 } from 'lucide-react';
+import AdminNav from '../components/admin/AdminNav.jsx';
 import DashboardShell from '../components/dashboard/DashboardShell.jsx';
 import EventTimeline from '../components/dashboard/EventTimeline.jsx';
 import StatCard from '../components/dashboard/StatCard.jsx';
@@ -42,8 +44,10 @@ export default function AdminDashboard() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
-  const [search, setSearch] = useState('');
-  const [debounced, setDebounced] = useState('');
+  const [params] = useSearchParams();
+  const initialQuery = params.get('q') ?? '';
+  const [search, setSearch] = useState(initialQuery);
+  const [debounced, setDebounced] = useState(initialQuery.trim());
   const [status, setStatus] = useState('');
   const [currency, setCurrency] = useState('');
   const [page, setPage] = useState(1);
@@ -189,6 +193,8 @@ export default function AdminDashboard() {
       }
     >
       <div className="space-y-6">
+        <AdminNav />
+
         {notice && (
           <div
             role="status"
