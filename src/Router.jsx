@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import App from './App.jsx';
@@ -6,6 +7,14 @@ import ApplicantLogin from './pages/ApplicantLogin.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
 import ApplicantDashboard from './pages/ApplicantDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
+
+const TITLES = {
+  '/': 'Zirat Bank — Personal & Business Loans | London Branch',
+  '/login': 'Track your application — Zirat Bank',
+  '/dashboard': 'Your application — Zirat Bank',
+  '/admin/login': 'Staff sign in — Zirat Bank',
+  '/admin': 'Staff console — Zirat Bank',
+};
 
 function FullPageLoader() {
   return (
@@ -66,6 +75,12 @@ function NotFound() {
 }
 
 export default function Router() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    document.title = TITLES[pathname] ?? 'Page not found — Zirat Bank';
+  }, [pathname]);
+
   return (
     <Routes>
       <Route path="/" element={<App />} />
