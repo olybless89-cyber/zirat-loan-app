@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import { BRAND } from '../config/site';
 import { scrollToSection } from '../lib/scroll';
+import GoogleTranslate from './GoogleTranslate.jsx';
 
 const LINKS = [
   { label: 'How It Works', id: 'how-it-works' },
@@ -11,7 +12,7 @@ const LINKS = [
 
 export function BrandMark({ compact = false }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="notranslate flex items-center gap-3" translate="no">
       <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand text-2xl font-black leading-none text-white shadow-md">
         <span aria-hidden="true">Z</span>
       </div>
@@ -76,6 +77,7 @@ export default function Navbar({ onOpenContact }) {
         </nav>
 
         <div className="flex items-center gap-2">
+          <GoogleTranslate className="mr-1" />
           <button
             type="button"
             onClick={() => go('basvuru-form')}
