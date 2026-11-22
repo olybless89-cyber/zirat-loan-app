@@ -42,6 +42,7 @@ const inputClass = (invalid) =>
 export default function ApplicationForm({
   amount,
   currency,
+  term,
   onAmountChange,
   onCurrencyChange,
   min,
@@ -97,6 +98,7 @@ export default function ApplicationForm({
           nationalId: values.nationalId,
           amount: Number(amount),
           currency,
+          termMonths: term,
           consent: values.consent,
         }),
       });
@@ -198,7 +200,12 @@ export default function ApplicationForm({
               </Field>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field id="form-amount" label="Loan amount" error={errors.amount}>
+                <Field
+                  id="form-amount"
+                  label="Loan amount"
+                  error={errors.amount}
+                  hint={`Over ${term} months, matching the calculator.`}
+                >
                   <input
                     id="form-amount"
                     name="amount"

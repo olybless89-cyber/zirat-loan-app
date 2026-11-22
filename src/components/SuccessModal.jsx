@@ -42,14 +42,21 @@ export default function SuccessModal({ result, onClose }) {
           </dl>
 
           <p className="text-xs leading-relaxed text-slate-500">
-            This is a demonstration. No credit decision has been made and no loan will be funded.
-            Your details were stored for testing only; ask the branch to delete them at any time.
+            Keep this reference. You can use it with the telephone number you applied with to track
+            the request in the applicant portal.
           </p>
+
+          <a
+            href="/login"
+            className="block w-full rounded-lg bg-brand px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-dark"
+          >
+            Track this application
+          </a>
 
           <button
             type="button"
             onClick={onClose}
-            className="w-full rounded-lg bg-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-navy-800"
+            className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-600 transition hover:text-navy"
           >
             Close
           </button>

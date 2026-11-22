@@ -14,12 +14,12 @@ const STEPS = [
   {
     icon: Search,
     title: 'Application review',
-    text: 'The request is recorded with a unique reference number you can quote to the branch.',
+    text: 'The request is recorded with a unique reference number you can use to follow it in the applicant portal.',
   },
   {
     icon: ThumbsUp,
     title: 'Receive a decision',
-    text: 'A live service would follow up through the authorised channel. This demo stops at the reference.',
+    text: 'Branch staff move the request through review and record a decision you can see in the portal.',
   },
 ];
 

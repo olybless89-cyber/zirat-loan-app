@@ -6,7 +6,7 @@
 Zirat Bank London Branch
 
 ### 1.2 Application Description
-Zirat Bank London Branch is a single-page banking-style loan landing page and pre-approval application web application. It features an interactive multi-currency loan calculator, an online application form with strict validation, customer testimonials, regulatory modals, and backend persistence for submitted applications.
+Zirat Bank London Branch is a banking-style loan landing page and pre-approval application web application. It features an interactive multi-currency loan calculator, an online application form with strict validation, customer testimonials, regulatory modals and backend persistence, together with an authenticated applicant portal for tracking a request and a staff console for reviewing and deciding it.
 
 ---
 
@@ -15,11 +15,14 @@ Zirat Bank London Branch is a single-page banking-style loan landing page and pr
 ### 2.1 Target Users
 - Prospective loan applicants seeking financing in multiple currencies (TRY, USD, EUR, GBP).
 - Cross-border and domestic clients reviewing loan terms and submitting pre-approval requests.
+- Branch staff who review submitted requests and record decisions.
 
 ### 2.2 Core Scenarios
 - Estimating monthly loan installments using the interactive loan calculator.
 - Completing and submitting a loan pre-approval application with personal identity and financing requirements.
 - Reviewing regulatory, privacy (KVKK / UK GDPR), and institutional contact details.
+- Tracking a submitted request, its status history and its estimate in the applicant portal.
+- Reviewing, filtering, deciding and exporting requests in the staff console.
 
 ---
 
@@ -29,22 +32,38 @@ Zirat Bank London Branch is a single-page banking-style loan landing page and pr
 
 ```text
 Zirat Bank London Branch
-└── Main Landing Page
-    ├── Announcement Bar
-    ├── Sticky Navigation Bar
-    ├── Hero Section
-    ├── Trust & Benefits Section
-    ├── How It Works Section
-    ├── Loan Calculator Section
-    ├── Application Form Section
-    ├── Testimonials Section
-    ├── Contact Section
-    ├── Footer Section
-    └── Information Modals
-        ├── Privacy Notice Modal
-        ├── KVKK Information Modal
-        ├── UK GDPR Modal
-        └── Submission Confirmation Modal
+├── Main Landing Page
+│   ├── Announcement Bar
+│   ├── Sticky Navigation Bar
+│   ├── Hero Section
+│   ├── Trust & Benefits Section
+│   ├── How It Works Section
+│   ├── Loan Calculator Section
+│   ├── Application Form Section
+│   ├── Testimonials Section
+│   ├── Contact Section
+│   ├── Footer Section
+│   └── Information Modals
+│       ├── Privacy Notice Modal
+│       ├── KVKK Information Modal
+│       ├── UK GDPR Modal
+│       └── Submission Confirmation Modal
+├── Applicant Portal
+│   ├── Applicant Sign-In (/login)
+│   └── Applicant Dashboard (/dashboard)
+│       ├── Summary Cards
+│       ├── Progress Timeline
+│       ├── Request Details
+│       ├── Update Request Modal
+│       └── Withdraw Confirmation Modal
+└── Staff Console
+    ├── Staff Sign-In (/admin/login)
+    └── Admin Dashboard (/admin)
+        ├── Status Metrics
+        ├── Search and Filters
+        ├── Applications Table and Pagination
+        ├── CSV Export
+        └── Review Modal with Decision Form
 ```
 
 ### 3.2 Functional Description
@@ -105,7 +124,27 @@ Zirat Bank London Branch
 - Brand identity, quick navigation links, contact recap, copyright notice.
 - Direct triggers for Privacy Notice, KVKK, and UK GDPR modals.
 
-#### 3.2.11 Information Modals
+#### 3.2.11 Applicant Portal
+- Sign-in with the application reference and the telephone number used on the application.
+- Summary of the requested amount, term, monthly instalment estimate and total repayable.
+- Progress timeline of public status changes and messages from the branch.
+- Request details, including a masked national ID showing only the last four digits.
+- Actions: copy the reference, print a summary, update the amount or telephone number
+  while the request is still open, and withdraw the request.
+- A decision banner explaining an approved, declined or withdrawn outcome.
+
+#### 3.2.12 Staff Console
+- Sign-in with a staff email address and password; sessions last eight hours.
+- Status metrics: total requests, awaiting review, approved, declined, plus requested value
+  per currency.
+- Search by reference, applicant name or telephone number, filter by status and currency.
+- Paginated applications table with a review action for each row.
+- Review modal with the applicant's details, the instalment estimate, the full event
+  history, and a form to set the status, attach a note and choose whether the applicant
+  can see that note.
+- CSV export of the current filter.
+
+#### 3.2.13 Information Modals
 - Modals for Privacy Notice, KVKK Information, UK GDPR Details, and Application Confirmation.
 - Support close button, backdrop click dismissal, and keyboard ESC key dismissal.
 - Application Confirmation modal displays generated unique Application Reference Number, submission summary, and next-step advisory.
@@ -119,6 +158,7 @@ Zirat Bank London Branch
 - **Telephone**: Required, Turkish mobile format validation (+90 5XX XXX XXXX or 0 5XX XXX XXXX).
 - **National ID (TC Kimlik No)**: Required, exactly 11 digits, first digit cannot be 0, Luhn/algorithmic checksum validation (10th and 11th digit verification rules).
 - **Loan Amount**: Required, within range 100,000 to 50,000,000 in selected currency.
+- **Term**: A whole number of months between 6 and 84, defaulting to the configured term.
 - **Consent Checkbox**: Must be explicitly checked before form submission is allowed.
 
 ### 4.2 State Synchronization Logic
@@ -127,8 +167,22 @@ Zirat Bank London Branch
 
 ### 4.3 Data Storage and Tracking
 - Backend generates a unique application reference identifier for each submission.
-- Form submissions are validated server-side and persisted with timestamps, status, selected currency, requested amount, contact info, and consent version.
+- Form submissions are validated server-side and persisted with timestamps, status, selected currency, requested amount, term, contact info, and consent version.
 - Sensitive identifiers (National ID, full telephone numbers) are strictly excluded from client-side analytics tracking payloads.
+- Every status change and note is appended to an immutable event history with the actor and a public or internal visibility flag.
+
+### 4.4 Authentication and Authorisation
+- Applicant sessions require a matching reference and telephone number, compared on the last ten digits so `+90 5XX…` and `0 5XX…` both work.
+- Staff sessions require the credentials supplied by the environment; the password is stored only as a salted scrypt hash and compared in constant time.
+- Session tokens are random, held in an httpOnly SameSite=Lax cookie, and stored server-side only as a SHA-256 hash. Sessions expire after 8 hours for staff and 7 days for applicants.
+- Applicant endpoints return only the signed-in applicant's own record; staff endpoints require the admin role.
+- Sign-in endpoints are rate limited and mutating requests must come from the same origin.
+
+### 4.5 Status Lifecycle
+- Statuses are `received`, `under_review`, `approved`, `declined` and `withdrawn`.
+- Applicants may update the amount or telephone, or withdraw, only while the request is `received` or `under_review`.
+- Staff may move a request to any status and may add a note without changing the status.
+- A declined or approved request can no longer be edited by the applicant.
 
 ---
 
@@ -141,6 +195,10 @@ Zirat Bank London Branch
 | Amount Out of Bounds | User manually inputs amount < 100,000 or > 50,000,000 | Clamp value or display boundary validation error message |
 | Missing Consent | Submit clicked without checking consent checkbox | Highlight checkbox with validation error prompt |
 | Server Submission Failure | Backend service error during record creation | Show user-friendly error message within modal/form and allow retry |
+| Unknown Reference or Telephone | Applicant sign-in details do not match a record | Generic message that no matching application was found, without confirming which field was wrong |
+| Expired or Missing Session | Protected page opened without a valid session | Redirect to the matching sign-in page |
+| Edit After Decision | Applicant tries to change or withdraw a decided request | Block the change and explain that the request is already decided |
+| Invalid Status Change | Staff submits an unknown status or an empty update | Reject with a validation message and keep the dialog open |
 
 ---
 
@@ -153,12 +211,18 @@ Zirat Bank London Branch
 5. Submitting a valid application triggers a loading state, creates a persisted backend record, and presents a confirmation modal containing a unique application reference number.
 6. Navigation links smoothly scroll to their respective sections, and modal dialogues open/close properly via buttons, backdrop, or ESC key.
 7. Testimonial carousel rotates automatically every 5 seconds, pauses on hover, and responds to manual controls.
+8. An applicant can sign in with their reference and telephone number and see the status, estimate and public history for their own request only.
+9. An applicant can update the amount or telephone number, or withdraw, while the request is open; decided requests are read-only.
+10. Staff can sign in, see aggregate metrics, search and filter requests, and open any request's full history.
+11. Staff can change a request's status and attach a note, choosing whether the applicant sees it, and the change appears in the applicant's timeline.
+12. Staff can export the current filtered list as CSV.
+13. Anonymous visitors are redirected to the correct sign-in page when they open a dashboard URL.
 
 ---
 
 ## 7. Out of Scope for Current Release
 
-- Administrative back-office management portal or authenticated user dashboards.
+- Self-service account registration, password reset and multi-user staff accounts.
 - Real-time credit bureau integration and automated credit score pulling.
 - Real payment gateway processing or actual fund disbursement.
-- User authentication or persistent account registration.
+- Document upload, e-signature and customer messaging beyond the application notes.
