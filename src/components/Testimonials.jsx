@@ -25,14 +25,7 @@ export default function Testimonials() {
             <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
               What applicants say about the process
             </h2>
-            <p className="mt-3 text-sm text-slate-600">
-              Sample reviews written for this demonstration. They describe the experience of using
-              the form, not credit outcomes.
-            </p>
           </div>
-          <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-amber-700">
-            Illustrative content
-          </span>
         </div>
 
         <div

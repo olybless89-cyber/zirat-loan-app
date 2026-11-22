@@ -3,7 +3,6 @@ import { AlertCircle, Check, Loader2, Send, ShieldCheck } from 'lucide-react';
 import {
   CURRENCIES,
   CURRENCY_META,
-  generateDemoId,
   validateApplication,
 } from '../../lib/validation.js';
 
@@ -62,11 +61,6 @@ export default function ApplicationForm({
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     setValues((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
-  };
-
-  const fillDemoId = () => {
-    setValues((prev) => ({ ...prev, nationalId: generateDemoId() }));
-    setErrors((prev) => ({ ...prev, nationalId: undefined }));
   };
 
   const handleSubmit = async (event) => {
@@ -177,28 +171,19 @@ export default function ApplicationForm({
                 error={errors.nationalId}
                 hint="11 digits, checksum verified. Only the last four digits are stored."
               >
-                <div className="flex gap-2">
-                  <input
-                    id="national-id"
-                    name="nationalId"
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={11}
-                    value={values.nationalId}
-                    onChange={update('nationalId')}
-                    aria-invalid={Boolean(errors.nationalId)}
-                    aria-describedby={errors.nationalId ? 'national-id-error' : 'national-id-hint'}
-                    placeholder="11 digits"
-                    className={inputClass(errors.nationalId)}
-                  />
-                  <button
-                    type="button"
-                    onClick={fillDemoId}
-                    className="mt-2 shrink-0 rounded-lg border border-slate-300 bg-slate-50 px-3.5 py-3 text-xs font-semibold text-slate-700 transition hover:border-brand hover:text-brand"
-                  >
-                    Fill demo ID
-                  </button>
-                </div>
+                <input
+                  id="national-id"
+                  name="nationalId"
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={11}
+                  value={values.nationalId}
+                  onChange={update('nationalId')}
+                  aria-invalid={Boolean(errors.nationalId)}
+                  aria-describedby={errors.nationalId ? 'national-id-error' : 'national-id-hint'}
+                  placeholder="11 digits"
+                  className={inputClass(errors.nationalId)}
+                />
               </Field>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -266,8 +251,7 @@ export default function ApplicationForm({
                     <button type="button" onClick={() => onOpenLegal('gdpr')} className="font-semibold text-brand underline underline-offset-2">
                       UK GDPR details
                     </button>
-                    , and I consent to my details being used to assess this demonstration
-                    application.
+                    , and I consent to my details being used to assess this application.
                   </label>
                 </div>
                 {errors.consent && (
@@ -315,15 +299,6 @@ export default function ApplicationForm({
           </div>
 
           <aside className="lg:col-span-5">
-            <div className="space-y-4 rounded-2xl border border-amber-200 bg-amber-50 p-5">
-              <p className="text-xs font-bold uppercase tracking-widest text-amber-700">Demo mode</p>
-              <p className="text-sm leading-relaxed text-amber-900">
-                This form stores test submissions only. No credit check is run, no decision is
-                made and no money is lent. Use the “Fill demo ID” button and invented details
-                rather than real personal data.
-              </p>
-            </div>
-
             <div className="mt-4 space-y-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <p className="flex items-center gap-2 text-sm font-bold text-navy">
                 <ShieldCheck className="h-4 w-4 text-brand" aria-hidden="true" />

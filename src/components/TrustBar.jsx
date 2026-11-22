@@ -25,7 +25,7 @@ const BADGES = [
     icon: Clock,
     title: 'Fast turnaround',
     hint: 'Most applications reviewed in two business days.',
-    tooltip: 'Indicative only. This demonstration does not issue credit decisions.',
+    tooltip: 'Indicative only. No credit decision is issued through this site.',
   },
 ];
 

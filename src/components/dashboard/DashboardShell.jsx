@@ -86,8 +86,7 @@ export default function DashboardShell({ role, subject, eyebrow, title, descript
         <div className="mt-8">{children}</div>
 
         <p className="mt-10 border-t border-slate-200 pt-5 text-xs leading-relaxed text-slate-500">
-          Demonstration build. No credit decision is made and no funds are disbursed. Do not enter
-          real personal data.
+          No credit decision is made and no funds are disbursed.
         </p>
       </main>
     </div>

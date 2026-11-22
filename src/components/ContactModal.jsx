@@ -7,8 +7,7 @@ export default function ContactModal({ open, onClose }) {
     <Modal open={open} title="Contact the London branch" onClose={onClose}>
       <div className="space-y-4">
         <p className="text-sm text-slate-600">
-          Speak to the branch about a demonstration application, or ask for your record to be
-          deleted.
+          Speak to the branch about your application, or ask for your record to be deleted.
         </p>
 
         <ul className="space-y-3">
@@ -59,8 +58,8 @@ export default function ContactModal({ open, onClose }) {
         )}
 
         <p className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
-          Contact details are those published for the London branch. This demonstration does not
-          issue credit decisions.
+          Contact details are those published for the London branch. No credit decision is issued
+          through this form.
         </p>
       </div>
     </Modal>

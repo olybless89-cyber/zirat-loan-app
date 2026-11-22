@@ -19,8 +19,8 @@ export default function Footer({ onOpenLegal, onOpenContact, contact = null }) {
               </div>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
-              A multi-currency loan pre-approval demonstration for the London branch. Figures are
-              illustrative, no credit decision is made and no loan is funded.
+              Multi-currency loan pre-approval for the London branch. Figures are indicative, no
+              credit decision is made and no loan is funded.
             </p>
           </div>
 
@@ -105,8 +105,8 @@ export default function Footer({ onOpenLegal, onOpenContact, contact = null }) {
 
         <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {BRAND.name}. Demonstration build — not a lender and not
-            authorised to provide credit.
+            © {new Date().getFullYear()} {BRAND.name}. Pre-approval requests are indicative only;
+            no credit decision is made and no funds are disbursed.
           </p>
           <div className="flex flex-wrap gap-4">
             <button type="button" onClick={() => onOpenLegal('privacy')} className="underline-offset-4 transition hover:text-white hover:underline">

@@ -7,7 +7,7 @@ import { useAuth } from '../lib/session.jsx';
 import { inputClass } from './ApplicantLogin.jsx';
 
 export default function AdminLogin() {
-  const { status, role, acceptSession, adminGeneratedPassword } = useAuth();
+  const { status, role, acceptSession } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -126,12 +126,6 @@ export default function AdminLogin() {
           )}
         </button>
       </form>
-
-      <p className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
-        {adminGeneratedPassword
-          ? 'No ADMIN_PASSWORD is configured, so the server generated a one-off password and printed it in the boot logs. Set ADMIN_EMAIL and ADMIN_PASSWORD to keep a stable login.'
-          : 'Credentials come from the ADMIN_EMAIL and ADMIN_PASSWORD environment variables.'}
-      </p>
     </AuthLayout>
   );
 }

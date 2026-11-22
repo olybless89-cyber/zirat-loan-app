@@ -139,7 +139,7 @@ describe('application form', () => {
 
     await user.type(screen.getByLabelText('Full name'), 'Ayşe Yılmaz');
     await user.type(screen.getByLabelText('Telephone'), '0532 123 4567');
-    await user.click(screen.getByRole('button', { name: /Fill demo ID/i }));
+    await user.type(screen.getByLabelText(/National ID/), '10000000146');
     await user.click(screen.getByRole('checkbox'));
     await user.click(screen.getByRole('button', { name: /Submit application/i }));
 
@@ -151,6 +151,6 @@ describe('application form', () => {
       amount: 2500000,
       consent: true,
     });
-    expect(posts[0].nationalId).toMatch(/^99\d{9}$/);
+    expect(posts[0].nationalId).toBe('10000000146');
   });
 });
