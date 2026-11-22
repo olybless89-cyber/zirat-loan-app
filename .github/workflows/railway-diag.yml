@@ -1,0 +1,25 @@
+name: Railway diagnostics
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      PROJECT: e784ac4e-3ba9-4f2f-8143-cb51f1fe631d
+      SERVICE: 9d18b0d0-2665-46b8-8e4f-4b2e7b9b4786
+    steps:
+      - name: Install CLI
+        run: npm install -g @railway/cli
+      - name: Whoami
+        run: railway whoami || true
+      - name: Status
+        run: railway status --project "$PROJECT" --environment production --json || true
+      - name: Deployments
+        run: railway deployment list --project "$PROJECT" --service "$SERVICE" --environment production --limit 5 --json || true
+      - name: Build logs
+        run: railway logs --project "$PROJECT" --service "$SERVICE" --environment production --build --lines 120 || true
+      - name: Deploy logs
+        run: railway logs --project "$PROJECT" --service "$SERVICE" --environment production --deployment --lines 120 || true
