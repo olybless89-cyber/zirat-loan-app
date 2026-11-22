@@ -22,7 +22,7 @@ export const RATES = {
 // override the branch details without a code change.
 export const CONTACT = {
   phone: read(env.VITE_CONTACT_PHONE) || '+44 20 7600 4985',
-  email: read(env.VITE_CONTACT_EMAIL) || 'applications@example.com',
+  email: read(env.VITE_CONTACT_EMAIL) || 'applications@ziraatbank.com',
   address:
     read(env.VITE_CONTACT_ADDRESS) ||
     'T.C. Ziraat Bankası A.Ş., London Branch, 45–47 Cornhill, London, EC3V 3PF, United Kingdom.',
