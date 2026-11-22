@@ -67,14 +67,7 @@ export default function App() {
       <Navbar onOpenContact={() => setContactOpen(true)} />
 
       <main id="main">
-        <Hero
-          amount={amount}
-          currency={currency}
-          rate={config.monthlyRate}
-          term={term}
-          onApply={goToForm}
-          onOpenContact={() => setContactOpen(true)}
-        />
+        <Hero amount={amount} currency={currency} onApply={goToForm} />
         <TrustBar />
         <HowItWorks />
         <LoanCalculator

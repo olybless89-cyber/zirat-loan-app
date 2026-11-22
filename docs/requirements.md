@@ -3,10 +3,10 @@
 ## 1. Application Overview
 
 ### 1.1 Application Name
-Zirat Loan App
+Zirat Bank London Branch
 
 ### 1.2 Application Description
-Zirat Loan App is a single-page banking-style loan landing page and pre-approval application web application. It features an interactive multi-currency loan calculator, an online application form with strict validation, customer testimonials, regulatory modals, and backend persistence for submitted applications.
+Zirat Bank London Branch is a single-page banking-style loan landing page and pre-approval application web application. It features an interactive multi-currency loan calculator, an online application form with strict validation, customer testimonials, regulatory modals, and backend persistence for submitted applications.
 
 ---
 
@@ -28,7 +28,7 @@ Zirat Loan App is a single-page banking-style loan landing page and pre-approval
 ### 3.1 Page Structure Tree
 
 ```text
-Zirat Loan App
+Zirat Bank London Branch
 └── Main Landing Page
     ├── Announcement Bar
     ├── Sticky Navigation Bar
