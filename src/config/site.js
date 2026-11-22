@@ -4,6 +4,7 @@ const read = (value) => (typeof value === 'string' && value.trim() ? value.trim(
 export const BRAND = {
   name: 'Zirat Bank',
   shortName: 'ZIRAT BANK',
+  legalName: 'T.C. Ziraat Bankası A.Ş.',
   branch: 'London Branch',
   regulator: 'Financial Conduct Authority',
   regulatorShort: 'FCA',
