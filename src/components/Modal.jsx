@@ -7,7 +7,14 @@ const FOCUSABLE =
 export default function Modal({ open, title, onClose, children, size = 'md' }) {
   const boxRef = useRef(null);
   const restoreRef = useRef(null);
+  const onCloseRef = useRef(onClose);
 
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  // Depends on `open` alone: re-running on every parent render would restore
+  // focus mid-typing and close the dialog when the click lands on the backdrop.
   useEffect(() => {
     if (!open) return undefined;
 
@@ -21,7 +28,7 @@ export default function Modal({ open, title, onClose, children, size = 'md' }) {
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
         event.stopPropagation();
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (event.key !== 'Tab' || !box) return;
@@ -46,7 +53,7 @@ export default function Modal({ open, title, onClose, children, size = 'md' }) {
       document.body.style.overflow = previousOverflow;
       restoreRef.current?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 

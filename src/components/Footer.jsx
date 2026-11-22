@@ -47,6 +47,16 @@ export default function Footer({ onOpenLegal, onOpenContact }) {
                   Contact
                 </button>
               </li>
+              <li>
+                <a href="/login" className="transition hover:text-white">
+                  Track an application
+                </a>
+              </li>
+              <li>
+                <a href="/admin/login" className="transition hover:text-white">
+                  Staff sign in
+                </a>
+              </li>
             </ul>
           </div>
 

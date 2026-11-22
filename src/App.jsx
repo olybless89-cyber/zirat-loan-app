@@ -85,6 +85,7 @@ export default function App() {
         <ApplicationForm
           amount={amount}
           currency={currency}
+          term={term}
           onAmountChange={setAmount}
           onCurrencyChange={setCurrency}
           min={config.minAmount}

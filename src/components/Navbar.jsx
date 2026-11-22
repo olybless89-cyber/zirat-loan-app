@@ -78,6 +78,9 @@ export default function Navbar({ onOpenContact }) {
           >
             Contact
           </button>
+          <a href="/login" className="py-1 transition-colors hover:text-brand">
+            Track application
+          </a>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -126,6 +129,12 @@ export default function Navbar({ onOpenContact }) {
             >
               Contact
             </button>
+            <a
+              href="/login"
+              className="border-b border-slate-100 py-3 text-left text-sm font-medium text-slate-700 hover:text-brand"
+            >
+              Track application
+            </a>
             <button
               type="button"
               onClick={() => go('basvuru-form')}

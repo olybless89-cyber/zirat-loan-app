@@ -10,7 +10,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node server.js",
-    "test": "node test/validation.test.js && vitest run"
+    "test": "node test/validation.test.js && node test/auth.test.js && vitest run",
+    "test:api": "node test/validation.test.js && node test/auth.test.js"
   },
   "engines": {
     "node": "22.x"
@@ -20,7 +21,8 @@
     "lucide-react": "^1.77.0",
     "pg": "^8.23.1",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.6"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.5",
