@@ -138,6 +138,16 @@ describe('applicant portal', () => {
   });
 });
 
+describe('document title', () => {
+  it('names the page for the current route', async () => {
+    stubApi({ 'GET /api/auth/session': anonymous });
+    renderAt('/login');
+
+    await screen.findByRole('heading', { name: 'Sign in to track' });
+    expect(document.title).toBe('Track your application — Zirat Bank');
+  });
+});
+
 describe('staff console', () => {
   it('lists applications and records a decision', async () => {
     const admin = () =>
