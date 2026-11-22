@@ -19,7 +19,7 @@ export function BrandMark({ compact = false }) {
       {!compact && (
         <div className="leading-tight">
           <div className="text-lg font-extrabold tracking-tight text-navy">{BRAND.shortName}</div>
-          <div className="text-[9px] font-medium leading-snug text-slate-500">{BRAND.legalName}</div>
+          <div className="text-[10px] font-semibold leading-snug text-navy">{BRAND.legalName}</div>
           <div className="text-[10px] font-bold uppercase tracking-widest text-brand">
             {BRAND.branch}
           </div>
