@@ -13,9 +13,12 @@ const LINKS = [
 export function BrandMark({ compact = false }) {
   return (
     <div className="notranslate flex items-center gap-3" translate="no">
-      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand text-2xl font-black leading-none text-white shadow-md">
-        <span aria-hidden="true">Z</span>
-      </div>
+      <img
+        src="/ziraat-logo.svg"
+        alt=""
+        aria-hidden="true"
+        className="h-14 w-auto shrink-0"
+      />
       {!compact && (
         <div className="leading-tight">
           <div className="text-lg font-extrabold tracking-tight text-navy">{BRAND.shortName}</div>
