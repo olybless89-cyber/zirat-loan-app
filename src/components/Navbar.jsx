@@ -12,10 +12,8 @@ const LINKS = [
 export function BrandMark({ compact = false }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex items-center justify-center rounded-xl bg-brand p-2.5 text-white shadow-md">
-        <svg className="h-7 w-7 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2 4 7v10l8 5 8-5V7l-8-5zm0 2.3L18 8v3.5L12 8 6 11.5V8l6-3.7zM6 13.2l6-3.5 6 3.5v3.6l-6 3.7-6-3.7v-3.6z" />
-        </svg>
+      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand text-2xl font-black leading-none text-white shadow-md">
+        <span aria-hidden="true">Z</span>
       </div>
       {!compact && (
         <div className="leading-tight">
@@ -55,10 +53,6 @@ export default function Navbar({ onOpenContact }) {
           aria-label={`${BRAND.name} home`}
         >
           <BrandMark />
-          <span className="hidden items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 shadow-inner sm:flex">
-            <span aria-hidden="true">🇬🇧</span>
-            <span>{BRAND.branch}</span>
-          </span>
         </button>
 
         <nav aria-label="Main" className="hidden items-center gap-8 text-sm font-medium text-slate-700 lg:flex">
@@ -87,7 +81,7 @@ export default function Navbar({ onOpenContact }) {
             onClick={() => go('basvuru-form')}
             className="hidden items-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-brand-dark hover:shadow-lg active:scale-95 sm:flex"
           >
-            <span>Get Pre-Approved</span>
+            <span>Request Pre-Approval</span>
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </button>
           <button
@@ -131,7 +125,7 @@ export default function Navbar({ onOpenContact }) {
               onClick={() => go('basvuru-form')}
               className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-md"
             >
-              <span>Get Pre-Approved</span>
+              <span>Request Pre-Approval</span>
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </button>
           </nav>

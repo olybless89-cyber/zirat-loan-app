@@ -199,7 +199,7 @@ if (existsSync(DIST_DIR)) {
 }
 
 initDb()
-  .then(() => app.listen(PORT, '0.0.0.0', () => console.log(`Zirat Loan App listening on ${PORT}`)))
+  .then(() => app.listen(PORT, '0.0.0.0', () => console.log(`Zirat Bank listening on ${PORT}`)))
   .catch((error) => {
     console.error(error);
     process.exit(1);

@@ -1,4 +1,4 @@
-# Zirat Loan App
+# Zirat Bank London Branch
 
 Multi-currency loan pre-approval demo: a React landing page with a live instalment
 calculator and a validated application form, backed by a small Express API.

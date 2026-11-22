@@ -47,8 +47,12 @@ afterEach(() => {
 describe('landing page', () => {
   it('renders the hero and the primary call to action', async () => {
     render(<App />);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/four currencies/i);
-    expect(screen.getByRole('button', { name: /Start your application/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      /Exclusive Personal & Business Loans from Zirat Bank London Branch/i,
+    );
+    expect(
+      screen.getByRole('button', { name: /Request Free Pre-Approval/i }),
+    ).toBeInTheDocument();
     await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/config'));
   });
 

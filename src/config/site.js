@@ -2,9 +2,19 @@ const env = import.meta.env ?? {};
 const read = (value) => (typeof value === 'string' && value.trim() ? value.trim() : '');
 
 export const BRAND = {
-  name: 'Zirat Loan App',
-  shortName: 'ZIRAT LOAN APP',
+  name: 'Zirat Bank',
+  shortName: 'ZIRAT BANK',
   branch: 'London Branch',
+  regulator: 'Financial Conduct Authority',
+  regulatorShort: 'FCA',
+  frn: '204439',
+};
+
+// Headline pricing shown in the hero. The calculator keeps its own
+// configurable monthly rate from the API.
+export const RATES = {
+  annualPercent: 3.9,
+  turnaroundHours: 48,
 };
 
 // Contact channels come from the environment so the build never ships invented
