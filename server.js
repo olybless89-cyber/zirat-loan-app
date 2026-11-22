@@ -2,9 +2,9 @@ import express from 'express';
 import path from 'node:path';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { CURRENCIES, MAX_AMOUNT, MIN_AMOUNT } from './lib/validation.js';
 import { initStore, purgeExpiredSessions } from './lib/store.js';
-import { describeAdminAccess } from './lib/auth.js';
+import { describeAdminAccess, ensureBootstrapAdmin } from './lib/auth.js';
+import { DEFAULT_SETTINGS } from './lib/settings.js';
 import { createPublicRoutes } from './routes/public.js';
 import { createAuthRoutes } from './routes/auth.js';
 import { createApplicantRoutes } from './routes/applicant.js';
@@ -14,14 +14,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
 const DIST_DIR = path.join(__dirname, 'dist');
 
-const config = {
-  monthlyRate: Number(process.env.MONTHLY_RATE || 2.49),
-  termMonths: Number(process.env.TERM_MONTHS || 36),
-  consentVersion: process.env.CONSENT_VERSION || '2026-11-zirat-v1',
-  currencies: CURRENCIES,
-  minAmount: MIN_AMOUNT,
-  maxAmount: MAX_AMOUNT,
-};
+// Stored settings win; these defaults apply until an owner saves a change.
+const config = { defaults: DEFAULT_SETTINGS };
 
 const app = express();
 app.disable('x-powered-by');
@@ -65,6 +59,7 @@ app.use((error, req, res, next) => {
 });
 
 initStore()
+  .then(() => ensureBootstrapAdmin())
   .then(() => {
     describeAdminAccess();
     setInterval(() => {

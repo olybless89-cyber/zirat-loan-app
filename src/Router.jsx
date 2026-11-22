@@ -7,6 +7,8 @@ import ApplicantLogin from './pages/ApplicantLogin.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
 import ApplicantDashboard from './pages/ApplicantDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
+import AdminUsers from './pages/AdminUsers.jsx';
+import AdminSettings from './pages/AdminSettings.jsx';
 
 const TITLES = {
   '/': 'Zirat Bank — Personal & Business Loans | London Branch',
@@ -14,6 +16,8 @@ const TITLES = {
   '/dashboard': 'Your application — Zirat Bank',
   '/admin/login': 'Staff sign in — Zirat Bank',
   '/admin': 'Staff console — Zirat Bank',
+  '/admin/users': 'Users — Zirat Bank',
+  '/admin/settings': 'Site settings — Zirat Bank',
 };
 
 function FullPageLoader() {
@@ -99,6 +103,22 @@ export default function Router() {
         element={
           <Protected role="admin">
             <AdminDashboard />
+          </Protected>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <Protected role="admin">
+            <AdminUsers />
+          </Protected>
+        }
+      />
+      <Route
+        path="/admin/settings"
+        element={
+          <Protected role="admin">
+            <AdminSettings />
           </Protected>
         }
       />

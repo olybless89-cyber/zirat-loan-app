@@ -2,7 +2,12 @@ import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { BRAND, CONTACT, WHATSAPP_LINK, telHref } from '../config/site';
 import { BrandMark } from './Navbar.jsx';
 
-export default function Footer({ onOpenLegal, onOpenContact }) {
+export default function Footer({ onOpenLegal, onOpenContact, contact = null }) {
+  const details = contact ?? CONTACT;
+  const whatsappLink = details.whatsapp
+    ? `https://wa.me/${details.whatsapp.replace(/\D/g, '')}`
+    : WHATSAPP_LINK;
+  
   return (
     <footer className="bg-navy text-slate-300">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -65,36 +70,36 @@ export default function Footer({ onOpenLegal, onOpenContact }) {
             <ul className="mt-4 space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
-                <a href={telHref(CONTACT.phone)} className="transition hover:text-white">
-                  {CONTACT.phone}
+                <a href={telHref(details.phone)} className="transition hover:text-white">
+                  {details.phone}
                 </a>
               </li>
-              {WHATSAPP_LINK && (
+              {whatsappLink && (
                 <li className="flex items-start gap-2">
                   <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
                   <a
-                    href={WHATSAPP_LINK}
+                    href={whatsappLink}
                     target="_blank"
                     rel="noreferrer noopener"
-                    aria-label={`WhatsApp ${CONTACT.whatsapp}`}
+                    aria-label={`WhatsApp ${details.whatsapp}`}
                     className="transition hover:text-white"
                   >
-                    {CONTACT.whatsapp}
+                    {details.whatsapp}
                   </a>
                 </li>
               )}
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
-                <a href={`mailto:${CONTACT.email}`} className="transition hover:text-white">
-                  {CONTACT.email}
+                <a href={`mailto:${details.email}`} className="transition hover:text-white">
+                  {details.email}
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
-                <span>{CONTACT.address}</span>
+                <span>{details.address}</span>
               </li>
             </ul>
-            <p className="mt-3 text-xs text-slate-500">{CONTACT.hours}</p>
+            <p className="mt-3 text-xs text-slate-500">{details.hours}</p>
           </div>
         </div>
 

@@ -15,6 +15,7 @@ export default function LoanCalculator({
   term,
   min,
   max,
+  currencies = CURRENCIES,
   onAmountChange,
   onCurrencyChange,
   onTermChange,
@@ -43,7 +44,7 @@ export default function LoanCalculator({
             <fieldset>
               <legend className="text-sm font-bold text-navy">Currency</legend>
               <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {CURRENCIES.map((code) => {
+                {(currencies?.length ? currencies : CURRENCIES).map((code) => {
                   const active = code === currency;
                   return (
                     <button

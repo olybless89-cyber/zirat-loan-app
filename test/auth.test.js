@@ -6,6 +6,7 @@ delete process.env.DATABASE_URL;
 
 const {
   checkAdminCredentials,
+  ensureBootstrapAdmin,
   hashPassword,
   hashToken,
   parseCookies,
@@ -19,9 +20,15 @@ const {
   deleteSession,
   findApplicationByReference,
   findApplicationByReferenceAndPhone,
+  createAdminUser,
+  deleteAdminUser,
   findSession,
   initStore,
+  listAdminUsers,
   listApplications,
+  loadSettings,
+  saveSettings,
+  updateAdminUser,
   listEvents,
   updateApplicationDetails,
   updateApplicationStatus,
@@ -36,12 +43,6 @@ assert.equal(verifyPassword('s3cret-passphrase', hash), true);
 assert.equal(verifyPassword('wrong', hash), false);
 assert.equal(verifyPassword('anything', 'not-a-hash'), false);
 assert.equal(verifyPassword('anything', null), false);
-
-// ---------- admin credentials ----------
-assert.equal(checkAdminCredentials('staff@example.test', 'correct horse battery staple'), true);
-assert.equal(checkAdminCredentials('STAFF@example.test', 'correct horse battery staple'), true);
-assert.equal(checkAdminCredentials('staff@example.test', 'nope'), false);
-assert.equal(checkAdminCredentials('someone@example.test', 'correct horse battery staple'), false);
 
 // ---------- cookies and tokens ----------
 assert.deepEqual(parseCookies('a=1; b=hello%20world'), { a: '1', b: 'hello world' });
@@ -60,6 +61,76 @@ assert.ok(validateTerm('abc'));
 
 // ---------- in-memory store ----------
 assert.equal(await initStore(), false, 'no DATABASE_URL means memory storage');
+
+// ---------- staff accounts ----------
+const bootstrap = await ensureBootstrapAdmin();
+assert.equal(bootstrap.created, true, 'the first boot seeds the env admin');
+assert.equal(bootstrap.email, 'staff@example.test');
+assert.equal((await ensureBootstrapAdmin()).created, false, 'seeding is idempotent');
+
+const owner = await checkAdminCredentials('staff@example.test', 'correct horse battery staple');
+assert.equal(owner.email, 'staff@example.test');
+assert.equal(owner.role, 'owner');
+assert.equal(
+  (await checkAdminCredentials('STAFF@example.test', 'correct horse battery staple')).email,
+  'staff@example.test',
+  'email matching ignores case',
+);
+assert.equal(await checkAdminCredentials('staff@example.test', 'nope'), null);
+assert.equal(await checkAdminCredentials('someone@example.test', 'correct horse battery staple'), null);
+
+const reviewer = await createAdminUser({
+  email: 'Reviewer@Example.test',
+  passwordHash: hashPassword('reviewer-passphrase'),
+  role: 'admin',
+});
+assert.equal(reviewer.email, 'reviewer@example.test');
+assert.equal(reviewer.role, 'admin');
+assert.equal((await listAdminUsers()).length, 2);
+assert.equal((await checkAdminCredentials('reviewer@example.test', 'reviewer-passphrase')).role, 'admin');
+
+await assert.rejects(
+  () => createAdminUser({ email: 'reviewer@example.test', passwordHash: hashPassword('x-123456789') }),
+  /already exists/,
+);
+
+await updateAdminUser(reviewer.id, { active: false });
+assert.equal(
+  await checkAdminCredentials('reviewer@example.test', 'reviewer-passphrase'),
+  null,
+  'disabled accounts cannot sign in',
+);
+await updateAdminUser(reviewer.id, { active: true, passwordHash: hashPassword('rotated-passphrase') });
+assert.equal(await checkAdminCredentials('reviewer@example.test', 'reviewer-passphrase'), null);
+assert.ok(await checkAdminCredentials('reviewer@example.test', 'rotated-passphrase'));
+
+assert.equal(await deleteAdminUser(reviewer.id), true);
+assert.equal(await deleteAdminUser(reviewer.id), false);
+assert.equal((await listAdminUsers()).length, 1);
+
+// The env credentials stay usable even after the stored password changes,
+// so a redeploy can never lock the operator out of the console.
+await updateAdminUser(owner.id, { passwordHash: hashPassword('changed-in-console') });
+assert.ok(await checkAdminCredentials('staff@example.test', 'changed-in-console'));
+assert.equal(
+  (await checkAdminCredentials('staff@example.test', 'correct horse battery staple')).role,
+  'owner',
+);
+
+// Deleting the owner row lets the env credentials recreate it on the next sign-in.
+await deleteAdminUser(owner.id);
+assert.equal((await listAdminUsers()).length, 0);
+const recovered = await checkAdminCredentials('staff@example.test', 'correct horse battery staple');
+assert.equal(recovered.role, 'owner');
+assert.equal((await listAdminUsers()).length, 1);
+
+// ---------- site settings ----------
+assert.equal(await loadSettings(), null, 'no stored settings until an owner saves them');
+const savedSettings = await saveSettings({ monthlyRate: 3.25, acceptingApplications: false });
+assert.equal(savedSettings.data.monthlyRate, 3.25);
+assert.equal((await loadSettings()).data.acceptingApplications, false);
+const replaced = await saveSettings({ monthlyRate: 2.5, acceptingApplications: true });
+assert.equal(replaced.data.monthlyRate, 2.5, 'a second save replaces the first');
 assert.deepEqual(ACTIVE_STATUSES, ['received', 'under_review']);
 
 const first = await createApplication({

@@ -12,11 +12,18 @@ service `amberline-web`, environment `production`.
 | --- | --- |
 | Landing page | <https://ziraatbank.up.railway.app> |
 | Applicant portal | <https://ziraatbank.up.railway.app/login> |
-| Staff console | <https://ziraatbank.up.railway.app/admin/login> |
+| Staff sign-in | <https://ziraatbank.up.railway.app/admin/login> |
+| Admin — applications | <https://ziraatbank.up.railway.app/admin> |
+| Admin — users | <https://ziraatbank.up.railway.app/admin/users> |
+| Admin — site settings | <https://ziraatbank.up.railway.app/admin/settings> |
 
-Staff credentials are set as Railway variables (`ADMIN_EMAIL`, `ADMIN_PASSWORD`) on the
-`production` environment and are never committed to this repository. Change them in the
-Railway dashboard; the service redeploys automatically.
+The first boot seeds one **owner** account from the Railway variables `ADMIN_EMAIL` and
+`ADMIN_PASSWORD`; the password is stored only as a scrypt hash in the database. From then
+on the owner signs in at `/admin/login` and manages every other staff account from
+`/admin/users`. Set the variables on the `production` environment in Railway; they are
+never committed to this repository. Those environment credentials are also a break-glass
+login: they keep working if the owner password is changed in the console or the owner row
+is deleted, so a redeploy cannot lock you out.
 
 > **Demonstration only.** This application is not a lender, is not authorised to provide
 > credit, and makes no credit decisions. It never contacts a credit bureau. Every figure it
@@ -109,6 +116,15 @@ docs/requirements.md       Product requirements this build follows
 | `GET` | `/api/admin/applications/:reference` | One record with its full event history |
 | `PATCH` | `/api/admin/applications/:reference` | Change status and/or add a note |
 | `GET` | `/api/admin/export.csv` | The filtered list as CSV |
+| `DELETE` | `/api/admin/applications/:reference` | Owner only: delete a record and its history |
+| `GET` | `/api/admin/me` | The signed-in staff account and its role |
+| `GET` | `/api/admin/users` | Staff accounts (never password hashes) |
+| `POST` | `/api/admin/users` | Owner only: create a staff account |
+| `PATCH` | `/api/admin/users/:id` | Owner only: role, active flag or password reset |
+| `DELETE` | `/api/admin/users/:id` | Owner only: remove a staff account |
+| `POST` | `/api/admin/users/me/password` | Change your own password with the current one |
+| `GET` | `/api/admin/settings` | Current site settings and when they were last saved |
+| `PUT` | `/api/admin/settings` | Owner only: validated pricing, currencies and contact details |
 
 `POST /api/applications` accepts `fullName`, `phone`, `nationalId`, `amount`, `currency`,
 an optional `termMonths` (6–84, defaulting to `TERM_MONTHS`) and `consent`. Invalid input returns `422` with a per-field `errors` object. Requests are rate
@@ -127,7 +143,8 @@ come from the same origin, and both sign-in endpoints are rate limited.
 |---|---|---|
 | `PORT` | `3000` | API and static server port |
 | `DATABASE_URL` | – | Enables Postgres storage; in-memory otherwise |
-| `MONTHLY_RATE` | `2.49` | Monthly rate used by the calculator, in percent |
+| `MONTHLY_RATE` | `2.49` | Starting monthly rate; owners can change it in the console |
+| `CONTACT_PHONE`, `CONTACT_EMAIL`, `CONTACT_WHATSAPP`, `CONTACT_HOURS`, `CONTACT_ADDRESS` | branch details | Starting contact details; owners can change them in the console |
 | `TERM_MONTHS` | `36` | Default term in months |
 | `CONSENT_VERSION` | `2026-11-zirat-v1` | Stored with each application |
 | `ADMIN_EMAIL` | `admin@ziratbank.demo` | Staff console login |
@@ -165,12 +182,26 @@ recorded.
 
 ### Staff console (`/admin/login`, `/admin`)
 
-Sign in with `ADMIN_EMAIL` and `ADMIN_PASSWORD`. The console shows counts by status,
-requested value per currency, a searchable and filterable table with pagination, and a
-review dialog with the full event history. Staff can move a request to `under_review`,
-`approved`, `declined` or `withdrawn`, attach a note, and choose whether that note is
-visible to the applicant. Every change is appended to the history with its actor. The
-current filter can be exported as CSV.
+Sign in with the owner credentials from `ADMIN_EMAIL` and `ADMIN_PASSWORD`. The console has
+three sections:
+
+- **Applications** (`/admin`) — counts by status, requested value per currency, a
+  searchable and filterable table with pagination, and a review dialog with the full event
+  history. Staff move a request to `under_review`, `approved`, `declined` or `withdrawn`,
+  attach a note and choose whether the applicant sees it. Every change is appended to the
+  history with its actor, and the current filter exports as CSV.
+- **Users** (`/admin/users`) — the staff accounts that can sign in, and every applicant on
+  file. The owner adds accounts, resets passwords, switches roles, disables or deletes
+  staff, and can delete an applicant record together with its history. A disabled account
+  is signed out on its next request because every admin request re-checks the account.
+- **Site settings** (`/admin/settings`) — monthly rate, default term, amount bounds,
+  enabled currencies, consent version, announcement bar text, branch contact details and
+  the switch that stops new applications. Saving writes one row to the `settings` table;
+  `/api/config` and every estimate read it immediately.
+
+Two roles exist. **Owner** accounts can change staff and settings; **admin** accounts can
+review applications and see settings read-only. The console refuses to demote, disable or
+delete the last active owner, and nobody can demote, disable or delete themselves.
 
 ## Tests
 
