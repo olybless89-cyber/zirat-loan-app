@@ -7,7 +7,7 @@ databases:
 
 services:
   - type: web
-    name: zirat-loan-app
+    name: ziraatbank
     runtime: node
     plan: free
     region: frankfurt

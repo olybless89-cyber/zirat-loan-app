@@ -5,17 +5,17 @@ calculator and a validated application form, plus two signed-in areas — an app
 portal for tracking a request and a staff console for reviewing it — backed by a small
 Express API.
 
-**Live:** <https://zirat-loan-app.onrender.com> · Render service `zirat-loan-app` (Frankfurt),
+**Live:** <https://ziraatbank.onrender.com> · Render service `ziraatbank` (Frankfurt),
 database `zirat-loan-db`.
 
 | Area | URL |
 | --- | --- |
-| Landing page | <https://zirat-loan-app.onrender.com> |
-| Applicant portal | <https://zirat-loan-app.onrender.com/login> |
-| Staff sign-in | <https://zirat-loan-app.onrender.com/admin/login> |
-| Admin — applications | <https://zirat-loan-app.onrender.com/admin> |
-| Admin — users | <https://zirat-loan-app.onrender.com/admin/users> |
-| Admin — site settings | <https://zirat-loan-app.onrender.com/admin/settings> |
+| Landing page | <https://ziraatbank.onrender.com> |
+| Applicant portal | <https://ziraatbank.onrender.com/login> |
+| Staff sign-in | <https://ziraatbank.onrender.com/admin/login> |
+| Admin — applications | <https://ziraatbank.onrender.com/admin> |
+| Admin — users | <https://ziraatbank.onrender.com/admin/users> |
+| Admin — site settings | <https://ziraatbank.onrender.com/admin/settings> |
 
 The first boot seeds one **owner** account from the environment variables `ADMIN_EMAIL`
 and `ADMIN_PASSWORD`; the password is stored only as a scrypt hash in the database. From
@@ -224,7 +224,7 @@ database, wired together so no values need copying by hand.
 
 | Setting | Value |
 |---|---|
-| Service | `zirat-loan-app` — runtime `node`, region `frankfurt` |
+| Service | `ziraatbank` — runtime `node`, region `frankfurt` |
 | Build | `npm ci --include=dev && npm run build` |
 | Start | `npm start` |
 | Health check | `/healthz` |
@@ -236,7 +236,7 @@ database, wired together so no values need copying by hand.
    password. Every other variable has a default in `render.yaml`.
 3. First boot creates the tables and seeds the owner from `ADMIN_EMAIL`
    (`admin@ziratbank.com`), then signs you in at `/admin/login`.
-4. The service is reachable at `https://zirat-loan-app.onrender.com` unless you add a
+4. The service is reachable at `https://ziraatbank.onrender.com` unless you add a
    custom domain.
 
 Every push to `main` redeploys automatically (`autoDeploy: true`); CI runs `npm test` and
