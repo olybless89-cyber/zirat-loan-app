@@ -5,17 +5,17 @@ calculator and a validated application form, plus two signed-in areas — an app
 portal for tracking a request and a staff console for reviewing it — backed by a small
 Express API.
 
-**Live:** <https://ziraatbank.up.railway.app> (Railway) — being moved to Render, see
-[Deploying to Render](#deploying-to-render).
+**Live:** <https://zirat-loan-app.onrender.com> · Render service `zirat-loan-app` (Frankfurt),
+database `zirat-loan-db`.
 
 | Area | URL |
 | --- | --- |
-| Landing page | <https://ziraatbank.up.railway.app> |
-| Applicant portal | <https://ziraatbank.up.railway.app/login> |
-| Staff sign-in | <https://ziraatbank.up.railway.app/admin/login> |
-| Admin — applications | <https://ziraatbank.up.railway.app/admin> |
-| Admin — users | <https://ziraatbank.up.railway.app/admin/users> |
-| Admin — site settings | <https://ziraatbank.up.railway.app/admin/settings> |
+| Landing page | <https://zirat-loan-app.onrender.com> |
+| Applicant portal | <https://zirat-loan-app.onrender.com/login> |
+| Staff sign-in | <https://zirat-loan-app.onrender.com/admin/login> |
+| Admin — applications | <https://zirat-loan-app.onrender.com/admin> |
+| Admin — users | <https://zirat-loan-app.onrender.com/admin/users> |
+| Admin — site settings | <https://zirat-loan-app.onrender.com/admin/settings> |
 
 The first boot seeds one **owner** account from the environment variables `ADMIN_EMAIL`
 and `ADMIN_PASSWORD`; the password is stored only as a scrypt hash in the database. From
@@ -247,6 +247,12 @@ Free-plan caveats: the web service sleeps after 15 idle minutes, so the first re
 after a quiet spell waits for a cold start, and a free Postgres database is deleted 30
 days after creation. Use the `starter` database plan, or point `DATABASE_URL` at Neon or
 Supabase, for anything you want to keep.
+
+### The live service
+
+The service in Frankfurt was created through the Render API rather than from the
+Blueprint, so the dashboard is the source of truth for it. `render.yaml` describes the same
+configuration and is what a fresh environment should be built from.
 
 ### Moving the data from Railway
 
