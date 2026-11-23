@@ -126,6 +126,10 @@ assert.equal(
   'owner',
   'the env password follows the owner after a rename',
 );
+const ownersBefore = (await listAdminUsers()).length;
+const viaStaleEnvEmail = await checkAdminCredentials('staff@example.test', 'correct horse battery staple');
+assert.equal(viaStaleEnvEmail.email, 'owner@example.test', 'the stale env email resolves to the owner');
+assert.equal((await listAdminUsers()).length, ownersBefore, 'and does not seed a second owner');
 const tempStaff = await createAdminUser({
   email: 'taken@example.test',
   passwordHash: hashPassword('another-passphrase'),
