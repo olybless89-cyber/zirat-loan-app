@@ -5,8 +5,8 @@ calculator and a validated application form, plus two signed-in areas — an app
 portal for tracking a request and a staff console for reviewing it — backed by a small
 Express API.
 
-**Live:** <https://ziraatbank.up.railway.app> · Railway project `amberline-loan-demo`,
-service `amberline-web`, environment `production`.
+**Live:** <https://ziraatbank.up.railway.app> (Railway) — being moved to Render, see
+[Deploying to Render](#deploying-to-render).
 
 | Area | URL |
 | --- | --- |
@@ -17,11 +17,11 @@ service `amberline-web`, environment `production`.
 | Admin — users | <https://ziraatbank.up.railway.app/admin/users> |
 | Admin — site settings | <https://ziraatbank.up.railway.app/admin/settings> |
 
-The first boot seeds one **owner** account from the Railway variables `ADMIN_EMAIL` and
-`ADMIN_PASSWORD`; the password is stored only as a scrypt hash in the database. From then
-on the owner signs in at `/admin/login` and manages every other staff account from
-`/admin/users`. Set the variables on the `production` environment in Railway; they are
-never committed to this repository. Those environment credentials are also a break-glass
+The first boot seeds one **owner** account from the environment variables `ADMIN_EMAIL`
+and `ADMIN_PASSWORD`; the password is stored only as a scrypt hash in the database. From
+then on the owner signs in at `/admin/login` and manages every other staff account from
+`/admin/users`. Set the variables on the host (Render or Railway); they are never
+committed to this repository. Those environment credentials are also a break-glass
 login: they keep working if the owner password is changed in the console or the owner row
 is deleted, so a redeploy cannot lock you out.
 
@@ -217,42 +217,55 @@ currency conversion, calculator/form sync, the carousel, modal dismissal and the
 submit path. `test/dashboard.test.jsx` covers applicant sign-in and the dashboard, the
 protected-route redirect, the staff list, the review dialog and recording a decision.
 
-## Deploying to Railway
+## Deploying to Render
 
-`railway.json` pins the whole pipeline, so a connected repo deploys without extra setup:
+`render.yaml` is a Render Blueprint: one Node web service plus a managed Postgres
+database, wired together so no values need copying by hand.
 
 | Setting | Value |
 |---|---|
-| Service | `amberline-web` (project `amberline-loan-demo`) |
-| Build | `npm install --include=dev && npm run build` |
+| Service | `zirat-loan-app` — runtime `node`, region `frankfurt` |
+| Build | `npm ci --include=dev && npm run build` |
 | Start | `npm start` |
-| Health check | `/healthz` (120 s timeout, restarts on failure) |
-| Node | 22 (`.nvmrc`) |
+| Health check | `/healthz` |
+| Node | 22 (`.nvmrc` and `NODE_VERSION`) |
+| Database | `zirat-loan-db`, `DATABASE_URL` injected by the blueprint |
 
-1. In Railway: **New Project → Deploy from GitHub repo → `olybless89-cyber/zirat-loan-app`**, branch `main`.
-2. Add **New → Database → PostgreSQL**. Railway injects `DATABASE_URL` into the service; the app creates its `applications` table on first boot.
-3. Set the service variables:
+1. Render → **New → Blueprint** → choose `olybless89-cyber/zirat-loan-app`, branch `main`.
+2. When prompted, set `ADMIN_PASSWORD` — it seeds the owner account and is the break-glass
+   password. Every other variable has a default in `render.yaml`.
+3. First boot creates the tables and seeds the owner from `ADMIN_EMAIL`
+   (`admin@ziratbank.com`), then signs you in at `/admin/login`.
+4. The service is reachable at `https://zirat-loan-app.onrender.com` unless you add a
+   custom domain.
 
-   ```
-   MONTHLY_RATE=2.49
-   TERM_MONTHS=36
-   CONSENT_VERSION=2026-11-zirat-v1
-   ADMIN_EMAIL=you@yourbranch.example
-   ADMIN_PASSWORD=a-long-random-value
-   VITE_CONTACT_PHONE=+44 ...
-   VITE_CONTACT_EMAIL=applications@...
-   VITE_CONTACT_ADDRESS=...
-   VITE_SUPPORT_HOURS=Mon–Fri, 09:00–18:00 GMT
-   ```
+Every push to `main` redeploys automatically (`autoDeploy: true`); CI runs `npm test` and
+`npm run build` on the same commit. `--include=dev` is deliberate: Render sets
+`NODE_ENV=production`, which would otherwise skip Vite.
 
-   `VITE_*` values are baked in at build time, so set them before the first deploy — changing them needs a redeploy.
-4. Generate a domain under **Settings → Networking**. `PORT` is provided by Railway and read by `server.js`.
+Free-plan caveats: the web service sleeps after 15 idle minutes, so the first request
+after a quiet spell waits for a cold start, and a free Postgres database is deleted 30
+days after creation. Use the `starter` database plan, or point `DATABASE_URL` at Neon or
+Supabase, for anything you want to keep.
 
-Every push to `main` redeploys automatically. Without `DATABASE_URL` the app still boots, but submissions live in memory and disappear on restart.
+### Moving the data from Railway
+
+The schema is created on boot, but rows are not. Dump and restore before you point anyone
+at the new URL:
+
+```bash
+pg_dump "$RAILWAY_DATABASE_URL" --no-owner --no-acl -f zirat.sql
+psql "$RENDER_EXTERNAL_DATABASE_URL" -f zirat.sql
+```
+
+`ADMIN_EMAIL`, `ADMIN_PASSWORD` and the `VITE_*` values are not in this repository; copy
+them into the Render dashboard. `VITE_*` values are baked in at build time, so set them
+before the first deploy.
 
 ## Deployment
 
-Any Node 20+ host works. Build, then run the server with `DATABASE_URL` set:
+Any Node 20+ host works (Render is configured in `render.yaml`). Build, then run the
+server with `DATABASE_URL` set:
 
 ```bash
 npm ci && npm run build && PORT=8080 npm start
