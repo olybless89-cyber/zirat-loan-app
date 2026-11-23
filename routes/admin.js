@@ -7,6 +7,7 @@ import {
   createAdminUser,
   deleteAdminUser,
   deleteApplication,
+  findAdminUserByEmail,
   findApplicationByReference,
   listAdminUsers,
   listAllApplications,
@@ -161,6 +162,16 @@ export function createAdminRoutes(config) {
       patch.active = body.active;
     }
 
+    if (body.email !== undefined) {
+      const { errors, email } = validateAccount({ email: body.email }, { passwordRequired: false });
+      if (errors.email) return res.status(422).json({ ok: false, errors });
+      const existing = await findAdminUserByEmail(email);
+      if (existing && existing.id !== target.id) {
+        return res.status(409).json({ ok: false, message: 'An account with that email already exists.' });
+      }
+      patch.email = email;
+    }
+
     if (body.password !== undefined) {
       const { errors } = validateAccount({ email: target.email, password: body.password });
       if (errors.password) return res.status(422).json({ ok: false, errors });
@@ -171,7 +182,15 @@ export function createAdminRoutes(config) {
       return res.status(422).json({ ok: false, message: 'Nothing to update.' });
     }
 
-    const updated = await updateAdminUser(target.id, patch);
+    let updated;
+    try {
+      updated = await updateAdminUser(target.id, patch);
+    } catch (error) {
+      if (error.code === 'EMAIL_TAKEN') {
+        return res.status(409).json({ ok: false, message: error.message });
+      }
+      throw error;
+    }
     return res.json({
       ok: true,
       user: {

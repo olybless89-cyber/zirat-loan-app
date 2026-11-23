@@ -295,6 +295,36 @@ describe('admin users and settings', () => {
     });
   });
 
+  it('changes a staff sign-in email', async () => {
+    const fetchMock = stubApi({
+      'GET /api/auth/session': signedIn(),
+      'GET /api/admin/me': () => response({ ok: true, user: STAFF }),
+      'GET /api/admin/users': () =>
+        response({ ok: true, users: [STAFF], currentUser: STAFF.id }),
+      'GET /api/admin/applications': () =>
+        response({ ok: true, items: [APPLICATION], total: 1, page: 1, pages: 1, pageSize: 50 }),
+      [`PATCH /api/admin/users/${STAFF.id}`]: () =>
+        response({ ok: true, user: { ...STAFF, email: 'desk@ziratbank.com' } }),
+    });
+
+    const user = userEvent.setup();
+    renderAt('/admin/users');
+
+    await user.click(await screen.findByRole('button', { name: 'Email' }));
+
+    const field = screen.getByLabelText('Sign-in email');
+    expect(field).toHaveValue('owner@example.test');
+    await user.clear(field);
+    await user.type(field, 'Desk@ziratbank.com');
+    await user.click(screen.getByRole('button', { name: 'Save email' }));
+
+    expect(await screen.findByText(/Sign-in email changed to desk@ziratbank.com/)).toBeInTheDocument();
+
+    const patchCall = fetchMock.mock.calls.find(([, options]) => options?.method === 'PATCH');
+    expect(patchCall[0]).toBe(`/api/admin/users/${STAFF.id}`);
+    expect(JSON.parse(patchCall[1].body)).toEqual({ email: 'Desk@ziratbank.com' });
+  });
+
   it('shows read-only controls to a non-owner admin', async () => {
     stubApi({
       'GET /api/auth/session': signedIn('reviewer@example.test'),

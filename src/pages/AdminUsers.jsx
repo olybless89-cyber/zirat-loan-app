@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   KeyRound,
   Loader2,
+  Mail,
   Plus,
   RefreshCw,
   Search,
@@ -68,9 +69,9 @@ export default function AdminUsers() {
     load();
   }, [load]);
 
-  const openDialog = (next) => {
+  const openDialog = (next, initial = EMPTY_STAFF) => {
     setDialog(next);
-    setForm(EMPTY_STAFF);
+    setForm(initial);
     setFormErrors({});
     setFormError('');
   };
@@ -117,6 +118,18 @@ export default function AdminUsers() {
           body: { password: form.password },
         }),
       `Password reset for ${dialog.user.email}.`,
+    );
+  };
+
+  const changeEmail = (event) => {
+    event.preventDefault();
+    run(
+      () =>
+        api(`/api/admin/users/${dialog.user.id}`, {
+          method: 'PATCH',
+          body: { email: form.email },
+        }),
+      `Sign-in email changed to ${form.email.trim().toLowerCase()}.`,
     );
   };
 
@@ -293,6 +306,17 @@ export default function AdminUsers() {
                           <button
                             type="button"
                             disabled={!isOwner || busy}
+                            onClick={() =>
+                              openDialog({ type: 'email', user }, { ...EMPTY_STAFF, email: user.email })
+                            }
+                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-brand hover:text-brand disabled:opacity-40"
+                          >
+                            <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+                            Email
+                          </button>
+                          <button
+                            type="button"
+                            disabled={!isOwner || busy}
                             onClick={() => openDialog({ type: 'password', user })}
                             className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-brand hover:text-brand disabled:opacity-40"
                           >
@@ -414,7 +438,7 @@ export default function AdminUsers() {
               value={form.email}
               onChange={(event) => setForm({ ...form, email: event.target.value })}
               className={inputClass}
-              placeholder="name@ziratbank.demo"
+              placeholder="name@ziratbank.com"
             />
             {formErrors.email && <p className="mt-1 text-xs font-medium text-brand">{formErrors.email}</p>}
           </div>
@@ -460,6 +484,45 @@ export default function AdminUsers() {
             >
               {busy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
               Create account
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal open={dialog?.type === 'email'} title="Change sign-in email" onClose={closeDialog} size="md">
+        <form onSubmit={changeEmail} className="space-y-4">
+          <p className="text-sm text-slate-600">
+            The account for{' '}
+            <span className="font-semibold text-navy">{dialog?.user?.email}</span> will sign in with
+            the new address. The password stays the same.
+          </p>
+          <div>
+            <label htmlFor="staff-email-new" className="block text-xs font-semibold text-slate-600">
+              Sign-in email
+            </label>
+            <input
+              id="staff-email-new"
+              type="email"
+              data-autofocus
+              value={form.email}
+              onChange={(event) => setForm({ ...form, email: event.target.value })}
+              className={inputClass}
+              placeholder="name@ziratbank.com"
+            />
+            {formErrors.email && <p className="mt-1 text-xs font-medium text-brand">{formErrors.email}</p>}
+          </div>
+          {formError && <p role="alert" className="rounded-lg bg-red-50 p-3 text-xs font-medium text-brand">{formError}</p>}
+          <div className="flex justify-end gap-2">
+            <button type="button" onClick={closeDialog} className="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={busy}
+              className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-bold text-white disabled:opacity-70"
+            >
+              {busy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
+              Save email
             </button>
           </div>
         </form>

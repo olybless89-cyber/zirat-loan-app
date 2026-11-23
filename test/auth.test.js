@@ -117,6 +117,27 @@ assert.equal(
   'owner',
 );
 
+// Renaming the sign-in email keeps the password and rejects duplicates.
+const renamed = await updateAdminUser(owner.id, { email: 'OWNER@Example.Test' });
+assert.equal(renamed.email, 'owner@example.test', 'the store normalises the address');
+assert.ok(await checkAdminCredentials('owner@example.test', 'changed-in-console'));
+assert.equal(
+  (await checkAdminCredentials('owner@example.test', 'correct horse battery staple')).role,
+  'owner',
+  'the env password follows the owner after a rename',
+);
+const tempStaff = await createAdminUser({
+  email: 'taken@example.test',
+  passwordHash: hashPassword('another-passphrase'),
+  role: 'admin',
+});
+await assert.rejects(
+  () => updateAdminUser(owner.id, { email: 'taken@example.test' }),
+  (error) => error.code === 'EMAIL_TAKEN',
+);
+await deleteAdminUser(tempStaff.id);
+await updateAdminUser(owner.id, { email: 'staff@example.test' });
+
 // Deleting the owner row lets the env credentials recreate it on the next sign-in.
 await deleteAdminUser(owner.id);
 assert.equal((await listAdminUsers()).length, 0);

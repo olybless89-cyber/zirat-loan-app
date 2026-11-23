@@ -80,7 +80,7 @@ export default function AdminLogin() {
             autoComplete="username"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="admin@ziratbank.demo"
+            placeholder="admin@ziratbank.com"
             className={inputClass}
           />
         </div>

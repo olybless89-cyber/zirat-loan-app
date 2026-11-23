@@ -147,7 +147,7 @@ come from the same origin, and both sign-in endpoints are rate limited.
 | `CONTACT_PHONE`, `CONTACT_EMAIL`, `CONTACT_WHATSAPP`, `CONTACT_HOURS`, `CONTACT_ADDRESS` | branch details | Starting contact details; owners can change them in the console |
 | `TERM_MONTHS` | `36` | Default term in months |
 | `CONSENT_VERSION` | `2026-11-zirat-v1` | Stored with each application |
-| `ADMIN_EMAIL` | `admin@ziratbank.demo` | Staff console login |
+| `ADMIN_EMAIL` | `admin@ziratbank.com` | Staff console login |
 | `ADMIN_PASSWORD` | generated at boot | Staff console password; when unset a one-off value is printed to the log |
 | `VITE_CONTACT_PHONE` / `_EMAIL` / `_ADDRESS` / `_WHATSAPP` | branch details | Contact details shown in the UI |
 | `VITE_SUPPORT_HOURS` | `Mon–Fri, 09:00–18:00 GMT` | Banner and contact hours |
