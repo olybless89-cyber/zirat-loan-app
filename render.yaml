@@ -1,0 +1,39 @@
+databases:
+  - name: zirat-loan-db
+    databaseName: zirat
+    user: zirat
+    plan: free
+    region: frankfurt
+
+services:
+  - type: web
+    name: zirat-loan-app
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: main
+    autoDeploy: true
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zirat-loan-db
+          property: connectionString
+      - key: ADMIN_EMAIL
+        value: admin@ziratbank.com
+      # Set on first deploy; never committed. This is the break-glass password
+      # and the seed password for the owner account.
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: MONTHLY_RATE
+        value: "2.49"
+      - key: TERM_MONTHS
+        value: "36"
+      - key: CONSENT_VERSION
+        value: 2026-11-zirat-v1
