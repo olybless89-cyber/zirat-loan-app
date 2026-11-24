@@ -268,6 +268,15 @@ bubble on `ziratbank.loan` and stays hidden on `ziraatbank.onrender.com`; three 
 Smartsupp accounts behave the same way, so it is a hostname policy on their side rather
 than a fault in this repository. Keep a custom domain attached.
 
+### Link previews
+
+`public/og-image.png` is the 1200 × 630 card that Slack, WhatsApp, X and LinkedIn
+show when a link to the site is pasted. `index.html` carries the Open Graph and
+Twitter tags that point at it, with absolute `https://ziratbank.loan` URLs so the
+preview works from any host. The card's source is `docs/og-card.html`; keep its
+headline in step with `<title>` and the meta description, because `test/og.test.js`
+fails when they drift. The PNG is kept under 300 kB, the size WhatsApp accepts.
+
 ### Moving the data from Railway
 
 The schema is created on boot, but rows are not. Dump and restore before you point anyone
