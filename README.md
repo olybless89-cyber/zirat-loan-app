@@ -5,17 +5,17 @@ calculator and a validated application form, plus two signed-in areas — an app
 portal for tracking a request and a staff console for reviewing it — backed by a small
 Express API.
 
-**Live:** <https://ziraatbank.onrender.com> · Render service `ziraatbank` (Frankfurt),
-database `zirat-loan-db`.
+**Live:** <https://ziratbank.loan> · Render service `ziraatbank` (Frankfurt),
+database `zirat-loan-db`. `www.ziratbank.loan` redirects to the apex domain.
 
 | Area | URL |
 | --- | --- |
-| Landing page | <https://ziraatbank.onrender.com> |
-| Applicant portal | <https://ziraatbank.onrender.com/login> |
-| Staff sign-in | <https://ziraatbank.onrender.com/admin/login> |
-| Admin — applications | <https://ziraatbank.onrender.com/admin> |
-| Admin — users | <https://ziraatbank.onrender.com/admin/users> |
-| Admin — site settings | <https://ziraatbank.onrender.com/admin/settings> |
+| Landing page | <https://ziratbank.loan> |
+| Applicant portal | <https://ziratbank.loan/login> |
+| Staff sign-in | <https://ziratbank.loan/admin/login> |
+| Admin — applications | <https://ziratbank.loan/admin> |
+| Admin — users | <https://ziratbank.loan/admin/users> |
+| Admin — site settings | <https://ziratbank.loan/admin/settings> |
 
 The first boot seeds one **owner** account from the environment variables `ADMIN_EMAIL`
 and `ADMIN_PASSWORD`; the password is stored only as a scrypt hash in the database. From
@@ -236,8 +236,8 @@ database, wired together so no values need copying by hand.
    password. Every other variable has a default in `render.yaml`.
 3. First boot creates the tables and seeds the owner from `ADMIN_EMAIL`
    (`admin@ziratbank.com`), then signs you in at `/admin/login`.
-4. The service is reachable at `https://ziraatbank.onrender.com` unless you add a
-   custom domain.
+4. Add the custom domain before pointing anyone at the site — the Smartsupp widget will
+   not render on the shared `*.onrender.com` hostname (see *Live chat* below).
 
 Every push to `main` redeploys automatically (`autoDeploy: true`); CI runs `npm test` and
 `npm run build` on the same commit. `--include=dev` is deliberate: Render sets
@@ -253,6 +253,20 @@ Supabase, for anything you want to keep.
 The service in Frankfurt was created through the Render API rather than from the
 Blueprint, so the dashboard is the source of truth for it. `render.yaml` describes the same
 configuration and is what a fresh environment should be built from.
+
+Custom domains `ziratbank.loan` (apex) and `www.ziratbank.loan` (redirect) are attached to
+the service and verified.
+
+### Live chat
+
+The Smartsupp snippet lives in `index.html`, so every route — landing page, applicant
+portal and staff console — loads it, and the widget survives client-side navigation. The
+key is the one in the Smartsupp dashboard for this account; change it in `index.html` only.
+
+Smartsupp refuses to render on free app-hosting domains. The same snippet shows the chat
+bubble on `ziratbank.loan` and stays hidden on `ziraatbank.onrender.com`; three separate
+Smartsupp accounts behave the same way, so it is a hostname policy on their side rather
+than a fault in this repository. Keep a custom domain attached.
 
 ### Moving the data from Railway
 
