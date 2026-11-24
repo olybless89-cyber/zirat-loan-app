@@ -1,0 +1,91 @@
+<!--
+  Source for public/og-image.png (1200x630). Open it at a 1200x630 viewport and
+  screenshot the card, then optimise the PNG back down under 300 kB:
+
+    npx serve .            # or any static server, from the repository root
+    open http://localhost:3000/docs/og-card.html
+
+  Keep the copy in step with <title> and the meta description in index.html;
+  test/og.test.js fails when they drift.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: #0B1D3A; }
+  body { font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .card {
+    position: relative; width: 1200px; height: 630px; overflow: hidden;
+    background:
+      radial-gradient(900px 480px at 88% 8%, rgba(200,16,46,.32), transparent 62%),
+      radial-gradient(760px 420px at 4% 96%, rgba(18,41,77,.95), transparent 60%),
+      linear-gradient(135deg, #0B1D3A 0%, #12294d 52%, #0B1D3A 100%);
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(120% 90% at 30% 20%, #000 30%, transparent 78%);
+  }
+  .edge { position: absolute; left: 0; top: 0; bottom: 0; width: 10px;
+    background: linear-gradient(180deg, #C8102E 0%, #8d0a1f 100%); }
+  .inner { position: absolute; inset: 0; padding: 58px 76px 54px 86px; display: flex; flex-direction: column; }
+
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .brand img { height: 62px; width: auto; display: block; }
+  .brand .name { color: #fff; font-size: 25px; font-weight: 800; letter-spacing: .16em; line-height: 1; }
+  .brand .legal { margin-top: 9px; color: #93a6c2; font-size: 11.5px; font-weight: 600;
+    letter-spacing: .17em; text-transform: uppercase; }
+
+  .rule { margin-top: 34px; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,.22), rgba(255,255,255,0)); }
+
+  .eyebrow { margin-top: 40px; display: flex; align-items: center; gap: 12px;
+    color: #ff8a9b; font-size: 13px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+  .eyebrow span.dot { width: 7px; height: 7px; border-radius: 50%; background: #C8102E; box-shadow: 0 0 0 4px rgba(200,16,46,.22); }
+
+  h1 { margin-top: 20px; color: #fff; font-size: 74px; line-height: 1.04; font-weight: 800; letter-spacing: -.028em; }
+  h1 em { font-style: normal; color: #ff3348; }
+
+  .sub { margin-top: 22px; color: #c3d0e2; font-size: 24px; font-weight: 400; letter-spacing: -.005em; }
+  .sub b { color: #fff; font-weight: 600; }
+
+  .foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; }
+  .domain { display: flex; align-items: center; gap: 12px; color: #fff; font-size: 21px; font-weight: 600; letter-spacing: .01em; }
+  .domain .bar { width: 34px; height: 3px; background: #C8102E; border-radius: 2px; }
+  .pill { display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06);
+    color: #e8eef7; font-size: 16px; font-weight: 600; letter-spacing: .01em; }
+  .pill i { width: 8px; height: 8px; border-radius: 50%; background: #28A745; display: block; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid"></div>
+  <div class="edge"></div>
+  <div class="inner">
+    <div class="brand">
+      <img src="../public/ziraat-logo.svg" alt="">
+      <div>
+        <div class="name">ZIRAT BANK</div>
+        <div class="legal">T.C. Ziraat Bankası A.Ş. · London Branch</div>
+      </div>
+    </div>
+    <div class="rule"></div>
+    <div class="eyebrow"><span class="dot"></span>London desk · exclusive financing</div>
+    <h1>Personal &amp; Business<br><em>Loans</em> from 3.90% p.a.</h1>
+    <div class="sub">Multi-currency pre-approval in <b>48 hours</b> — TRY · USD · EUR · GBP</div>
+    <div class="foot">
+      <div class="domain"><span class="bar"></span>ziratbank.loan</div>
+      <div class="pill"><i></i>Unsecured · no credit bureau check</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
