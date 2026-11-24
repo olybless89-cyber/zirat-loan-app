@@ -9,6 +9,7 @@ import ApplicantDashboard from './pages/ApplicantDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import AdminUsers from './pages/AdminUsers.jsx';
 import AdminSettings from './pages/AdminSettings.jsx';
+import WhatsAppButton from './components/WhatsAppButton.jsx';
 
 const TITLES = {
   '/': 'Zirat Bank — Personal & Business Loans | London Branch',
@@ -85,44 +86,49 @@ export default function Router() {
     document.title = TITLES[pathname] ?? 'Page not found — Zirat Bank';
   }, [pathname]);
 
+  const showWhatsApp = !pathname.startsWith('/admin');
+
   return (
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/login" element={<ApplicantLogin />} />
-      <Route
-        path="/dashboard"
-        element={
-          <Protected role="applicant">
-            <ApplicantDashboard />
-          </Protected>
-        }
-      />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route
-        path="/admin"
-        element={
-          <Protected role="admin">
-            <AdminDashboard />
-          </Protected>
-        }
-      />
-      <Route
-        path="/admin/users"
-        element={
-          <Protected role="admin">
-            <AdminUsers />
-          </Protected>
-        }
-      />
-      <Route
-        path="/admin/settings"
-        element={
-          <Protected role="admin">
-            <AdminSettings />
-          </Protected>
-        }
-      />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      {showWhatsApp && <WhatsAppButton />}
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/login" element={<ApplicantLogin />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Protected role="applicant">
+              <ApplicantDashboard />
+            </Protected>
+          }
+        />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin"
+          element={
+            <Protected role="admin">
+              <AdminDashboard />
+            </Protected>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <Protected role="admin">
+              <AdminUsers />
+            </Protected>
+          }
+        />
+        <Route
+          path="/admin/settings"
+          element={
+            <Protected role="admin">
+              <AdminSettings />
+            </Protected>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
