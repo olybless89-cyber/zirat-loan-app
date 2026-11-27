@@ -10,8 +10,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node server.js",
-    "test": "node test/validation.test.js && node test/settings.test.js && node test/auth.test.js && node test/deploy.test.js && node test/og.test.js && vitest run",
-    "test:api": "node test/validation.test.js && node test/settings.test.js && node test/auth.test.js && node test/deploy.test.js && node test/og.test.js"
+    "test": "node test/validation.test.js && node test/settings.test.js && node test/auth.test.js && node test/deploy.test.js && node test/og.test.js && node test/mail.test.js && vitest run",
+    "test:api": "node test/validation.test.js && node test/settings.test.js && node test/auth.test.js && node test/deploy.test.js && node test/og.test.js && node test/mail.test.js"
   },
   "engines": {
     "node": "22.x"

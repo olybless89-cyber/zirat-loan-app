@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Inbox, Settings, Users } from 'lucide-react';
+import { Inbox, Mail, Settings, Users } from 'lucide-react';
 
 const TABS = [
   { to: '/admin', label: 'Applications', icon: Inbox },
   { to: '/admin/users', label: 'Users', icon: Users },
+  { to: '/admin/mail', label: 'Mail', icon: Mail },
   { to: '/admin/settings', label: 'Site settings', icon: Settings },
 ];
 

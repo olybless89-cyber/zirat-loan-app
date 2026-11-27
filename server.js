@@ -9,6 +9,7 @@ import { createPublicRoutes } from './routes/public.js';
 import { createAuthRoutes } from './routes/auth.js';
 import { createApplicantRoutes } from './routes/applicant.js';
 import { createAdminRoutes } from './routes/admin.js';
+import { createMailRoutes } from './routes/mail.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
@@ -20,7 +21,7 @@ const config = { defaults: DEFAULT_SETTINGS };
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', true);
-app.use(express.json({ limit: '20kb' }));
+app.use(express.json({ limit: '128kb' }));
 app.use((req, res, next) => {
   res.set('X-Content-Type-Options', 'nosniff');
   res.set('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -33,6 +34,7 @@ app.get('/healthz', (req, res) => res.json({ ok: true }));
 app.use('/api', createPublicRoutes(config));
 app.use('/api', createAuthRoutes());
 app.use('/api/applicant', createApplicantRoutes(config));
+app.use('/api/admin/mail', createMailRoutes(config));
 app.use('/api/admin', createAdminRoutes(config));
 app.use('/api', (req, res) => res.status(404).json({ ok: false, message: 'Not found' }));
 

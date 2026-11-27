@@ -37,3 +37,11 @@ services:
         value: "36"
       - key: CONSENT_VERSION
         value: 2026-11-zirat-v1
+      # Email: Resend Inboxes. Set the API key on the service; MAIL_INBOX is the
+      # address customers reply to. Without both, the Mail tab stays in setup mode.
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_INBOX
+        value: admin@ziratbank.loan
+      - key: MAIL_FROM_NAME
+        value: Zirat Bank London Branch
