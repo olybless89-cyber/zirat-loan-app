@@ -9,6 +9,7 @@ import ApplicantDashboard from './pages/ApplicantDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import AdminUsers from './pages/AdminUsers.jsx';
 import AdminSettings from './pages/AdminSettings.jsx';
+import AdminMail from './pages/AdminMail.jsx';
 import WhatsAppButton from './components/WhatsAppButton.jsx';
 
 const TITLES = {
@@ -18,6 +19,7 @@ const TITLES = {
   '/admin/login': 'Staff sign in — Zirat Bank',
   '/admin': 'Staff console — Zirat Bank',
   '/admin/users': 'Users — Zirat Bank',
+  '/admin/mail': 'Mail — Zirat Bank',
   '/admin/settings': 'Site settings — Zirat Bank',
 };
 
@@ -116,6 +118,14 @@ export default function Router() {
           element={
             <Protected role="admin">
               <AdminUsers />
+            </Protected>
+          }
+        />
+        <Route
+          path="/admin/mail"
+          element={
+            <Protected role="admin">
+              <AdminMail />
             </Protected>
           }
         />

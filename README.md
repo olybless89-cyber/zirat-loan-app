@@ -125,6 +125,12 @@ docs/requirements.md       Product requirements this build follows
 | `POST` | `/api/admin/users/me/password` | Change your own password with the current one |
 | `GET` | `/api/admin/settings` | Current site settings and when they were last saved |
 | `PUT` | `/api/admin/settings` | Owner only: validated pricing, currencies and contact details |
+| `GET` | `/api/admin/mail/status` | Whether Resend is configured, and the inbox address |
+| `GET` | `/api/admin/mail/threads` | Threads in one folder (`folder`, `q`, `limit`) |
+| `GET` | `/api/admin/mail/threads/:id` | One thread with every message, HTML included |
+| `POST` | `/api/admin/mail/threads/:id/reply` | Reply to the newest received message in the thread |
+| `POST` | `/api/admin/mail/threads/:id/folder` | Move a thread to `inbox`, `archive`, `spam` or `trash` |
+| `POST` | `/api/admin/mail/send` | Compose a new message from the inbox address |
 
 `POST /api/applications` accepts `fullName`, `phone`, `nationalId`, `amount`, `currency`,
 an optional `termMonths` (6–84, defaulting to `TERM_MONTHS`) and `consent`. Invalid input returns `422` with a per-field `errors` object. Requests are rate
@@ -152,6 +158,9 @@ come from the same origin, and both sign-in endpoints are rate limited.
 | `VITE_CONTACT_PHONE` / `_EMAIL` / `_ADDRESS` / `_WHATSAPP` | branch details | Contact details shown in the UI |
 | `VITE_SUPPORT_HOURS` | `Mon–Fri, 09:00–18:00 GMT` | Banner and contact hours |
 | `VITE_FB_PIXEL_ID`, `VITE_GA_ID` | – | Analytics, loaded only when set |
+| `RESEND_API_KEY` | – | Resend key for the Mail section; without it the tab stays in setup mode |
+| `MAIL_INBOX` | – | The inbox address, e.g. `admin@ziratbank.loan` |
+| `MAIL_FROM_NAME` | `Zirat Bank London Branch` | Display name on outgoing mail |
 
 The fallback contact details are the London branch's published phone, address and
 WhatsApp number. Override them with the `VITE_CONTACT_*` variables if they change.
@@ -198,10 +207,35 @@ three sections:
   enabled currencies, consent version, announcement bar text, branch contact details and
   the switch that stops new applications. Saving writes one row to the `settings` table;
   `/api/config` and every estimate read it immediately.
+- **Mail** (`/admin/mail`) — the branch inbox, backed by [Resend
+  Inboxes](https://resend.com/docs/dashboard/inboxes/introduction). Staff read received
+  mail, reply in thread, compose new messages, search, and move threads to archive, spam or
+  trash. Inbound HTML renders inside a sandboxed iframe with scripts disabled, so a hostile
+  message cannot touch the console session.
 
 Two roles exist. **Owner** accounts can change staff and settings; **admin** accounts can
 review applications and see settings read-only. The console refuses to demote, disable or
 delete the last active owner, and nobody can demote, disable or delete themselves.
+
+### Setting up email
+
+The Mail tab needs three things, none of which live in the repository:
+
+1. **A verified domain in Resend.** Add `ziratbank.loan`, then publish the DKIM and SPF
+   records Resend shows in Cloudflare. Sending fails until they verify.
+2. **Receiving enabled.** Turn on receiving for the domain, then add the MX record Resend
+   gives you (`receive.forge.rmta.net` or a regional variant) to Cloudflare. That record is
+   what lets replies reach the inbox — without it the tab can send but never receive.
+3. **An inbox.** Create `admin@ziratbank.loan`, then set `RESEND_API_KEY` and `MAIL_INBOX`
+   on the Render service and redeploy. The key is per team; treat it like the admin
+   password and never commit it.
+
+`GET /api/admin/mail/status` reports which of the two variables is missing, and the tab
+shows the same list instead of failing, so a half-configured deploy stays usable.
+
+Known limits of the current build: attachments are listed with their names and sizes but
+cannot be downloaded yet, and outbound mail is plain text turned into simple HTML — no rich
+text editor, no attachment upload.
 
 ## Tests
 
